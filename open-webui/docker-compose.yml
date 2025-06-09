@@ -9,7 +9,5 @@ services:
       - ./volume:/app/backend/data
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    environment:
-      - NVIDIA_VISIBLE_DEVICES=all
     runtime: nvidia
 

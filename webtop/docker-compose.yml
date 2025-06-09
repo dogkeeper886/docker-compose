@@ -1,0 +1,23 @@
+services:
+  firefox:
+    image: linuxserver/webtop:ubuntu-kde
+    container_name: firefox
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    runtime: nvidia
+    volumes:
+      - ./volume-firefox:/config
+    environment:
+      - TZ=Asia/Taipei      
+  chrome:
+    image: linuxserver/webtop:debian-xfce
+    container_name: chrome
+    ports:
+      - "3001:3000"
+    restart: unless-stopped
+    runtime: nvidia
+    volumes:
+      - ./volume-chrome:/config              
+    environment:
+      - TZ=Asia/Taipei
