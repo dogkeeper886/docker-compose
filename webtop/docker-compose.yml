@@ -5,7 +5,7 @@ services:
     ports:
       - "3000:3000"
     restart: unless-stopped
-    runtime: nvidia
+    #runtime: nvidia
     volumes:
       - ./volume-firefox:/config
     environment:
@@ -16,7 +16,7 @@ services:
     ports:
       - "3001:3000"
     restart: unless-stopped
-    runtime: nvidia
+    #runtime: nvidia
     volumes:
       - ./volume-chrome:/config              
     environment:
