@@ -1,0 +1,10 @@
+services:
+  ollama37:
+    image: dogkeeper886/ollama37
+    container_name: ollama37
+    ports:
+      - "11434:11434"
+    restart: unless-stopped
+    runtime: nvidia
+    volumes:
+      - ./volume:/root/.ollama
