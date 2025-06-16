@@ -8,3 +8,5 @@ services:
     runtime: nvidia
     volumes:
       - ./volume:/root/.ollama
+    environment:
+      - TZ=Asia/Taipei         
