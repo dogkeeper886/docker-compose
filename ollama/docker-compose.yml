@@ -1,12 +1,14 @@
+# Ollama - Official LLM service with GPU acceleration
+# Provides local language model hosting and inference
 services:
   ollama:
-    image: ollama/ollama
-    container_name: ollama
+    image: ollama/ollama                # Official Ollama image
+    container_name: ollama              # Fixed container name for easy reference
     ports:
-      - "11434:11434"
-    restart: unless-stopped
-    runtime: nvidia
+      - "11434:11434"                   # Ollama API port
+    restart: unless-stopped             # Auto-restart on failure
+    runtime: nvidia                     # Enable NVIDIA GPU support
     volumes:
-      - ./volume:/root/.ollama
+      - ./volume:/root/.ollama          # Persist models and configuration
     environment:
-      - TZ=Asia/Taipei         
+      - TZ=Asia/Taipei                  # Set timezone for logs and scheduling         

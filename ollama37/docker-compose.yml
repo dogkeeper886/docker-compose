@@ -1,12 +1,14 @@
+# Ollama37 - Custom Ollama build with additional features
+# Note: This conflicts with standard ollama on port 11434
 services:
   ollama37:
-    image: dogkeeper886/ollama37
-    container_name: ollama37
+    image: dogkeeper886/ollama37        # Custom Ollama image with extended features
+    container_name: ollama37            # Fixed container name for easy reference
     ports:
-      - "11434:11434"
-    restart: unless-stopped
-    runtime: nvidia
+      - "11434:11434"                   # Ollama API port (conflicts with standard ollama)
+    restart: unless-stopped             # Auto-restart on failure
+    runtime: nvidia                     # Enable NVIDIA GPU support
     volumes:
-      - ./volume:/root/.ollama
+      - ./volume:/root/.ollama          # Persist models and configuration
     environment:
-      - TZ=Asia/Taipei         
+      - TZ=Asia/Taipei                  # Set timezone for logs and scheduling         

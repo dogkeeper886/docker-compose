@@ -1,23 +1,26 @@
+# Webtop - Linux desktop environments accessible via web browser
+# Provides containerized desktop sessions with different browsers and desktop environments
 services:
   firefox:
-    image: linuxserver/webtop:ubuntu-kde
-    container_name: firefox
+    image: linuxserver/webtop:ubuntu-kde      # Ubuntu with KDE desktop and Firefox
+    container_name: firefox                   # Fixed container name for easy reference
     ports:
-      - "3000:3000"
-    restart: unless-stopped
-    runtime: nvidia
+      - "3000:3000"                           # Web-accessible desktop port
+    restart: unless-stopped                   # Auto-restart on failure
+    runtime: nvidia                           # Enable NVIDIA GPU support for hardware acceleration
     volumes:
-      - ./volume-firefox:/config
+      - ./volume-firefox:/config              # Persist desktop configuration and user data
     environment:
-      - TZ=Asia/Taipei      
+      - TZ=Asia/Taipei                        # Set timezone for desktop environment
+      
   chrome:
-    image: linuxserver/webtop:debian-xfce
-    container_name: chrome
+    image: linuxserver/webtop:debian-xfce     # Debian with XFCE desktop and Chrome
+    container_name: chrome                    # Fixed container name for easy reference
     ports:
-      - "3001:3000"
-    restart: unless-stopped
-    runtime: nvidia
+      - "3001:3000"                           # Web-accessible desktop port (different from Firefox)
+    restart: unless-stopped                   # Auto-restart on failure
+    runtime: nvidia                           # Enable NVIDIA GPU support for hardware acceleration
     volumes:
-      - ./volume-chrome:/config              
+      - ./volume-chrome:/config               # Persist desktop configuration and user data
     environment:
-      - TZ=Asia/Taipei
+      - TZ=Asia/Taipei                        # Set timezone for desktop environment
