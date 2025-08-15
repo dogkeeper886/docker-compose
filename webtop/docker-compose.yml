@@ -1,26 +1,27 @@
 # Webtop - Linux desktop environments accessible via web browser
 # Provides containerized desktop sessions with different browsers and desktop environments
 services:
-  firefox:
-    image: linuxserver/webtop:ubuntu-icewm-version-9cbbea80     # Ubuntu with ICEwm desktop and Firefox
-    container_name: firefox                   # Fixed container name for easy reference
-    ports:
-      - "3003:3000"                           # Web-accessible desktop port
-    restart: unless-stopped                   # Auto-restart on failure
-    runtime: nvidia                           # Enable NVIDIA GPU support for hardware acceleration
-    volumes:
-      - ./volume-firefox:/config              # Persist desktop configuration and user data
-    environment:
-      - TZ=Asia/Taipei                        # Set timezone for desktop environment
+#  firefox:
+#    image: linuxserver/webtop:debian-kde     
+#    container_name: firefox                   
+#    ports:
+#      - "3003:3001"                           
+#    restart: unless-stopped                   
+#    runtime: nvidia                           
+#    volumes:
+#      - ./volume-firefox:/config              
+#    environment:
+#      - TZ=Asia/Taipei
+#      - PUID=1000
+#      - PGID=1000                        
       
   chromium:
-    image: linuxserver/webtop:fedora-mate-version-51845aa9      # Fedora with MATE desktop and Chromium
-    container_name: chromium                   # Fixed container name for easy reference
+    image: linuxserver/webtop:fedora-kde     
     ports:
-      - "3002:3000"                           # Web-accessible desktop port
-    restart: unless-stopped                   # Auto-restart on failure
-    runtime: nvidia                           # Enable NVIDIA GPU support for hardware acceleration
-    volumes:
-      - ./volume-chromium:/config              # Persist desktop configuration and user data
+      - "3002:3001"                           
+    restart: unless-stopped                  
+    runtime: nvidia                                        
     environment:
-      - TZ=Asia/Taipei                        # Set timezone for desktop environment
+      - TZ=Asia/Taipei                        
+      - PUID=1000
+      - PGID=1000    
