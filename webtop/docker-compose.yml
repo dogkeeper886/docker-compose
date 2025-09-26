@@ -1,27 +1,9 @@
-# Webtop - Linux desktop environments accessible via web browser
-# Provides containerized desktop sessions with different browsers and desktop environments
 services:
-#  firefox:
-#    image: linuxserver/webtop:debian-kde     
-#    container_name: firefox                   
-#    ports:
-#      - "3003:3001"                           
-#    restart: unless-stopped                   
-#    runtime: nvidia                           
-#    volumes:
-#      - ./volume-firefox:/config              
-#    environment:
-#      - TZ=Asia/Taipei
-#      - PUID=1000
-#      - PGID=1000                        
-      
-  chromium:
-    image: linuxserver/webtop:fedora-kde     
+  webtop:
+    image: linuxserver/webtop:fedora-mate     
     ports:
-      - "3002:3001"                           
+      - "3001:3001"                           
     restart: unless-stopped                  
     runtime: nvidia                                        
     environment:
       - TZ=Asia/Taipei                        
-      - PUID=1000
-      - PGID=1000    
