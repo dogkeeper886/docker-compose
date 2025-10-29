@@ -5,5 +5,7 @@ services:
       - "3001:3001"                           
     restart: unless-stopped                  
     runtime: nvidia                                        
+    volumes:
+      - ./volume:/config                      # Persist user data and desktop settings
     environment:
       - TZ=Asia/Taipei                        
