@@ -3,3 +3,5 @@ ollama37/volume
 open-webui/volume
 webtop/volume
 qdrant/volume-qdrant
+gitlab/volume
+gitlab/.env
