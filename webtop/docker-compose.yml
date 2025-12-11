@@ -1,6 +1,6 @@
 services:
   webtop:
-    image: linuxserver/webtop:fedora-mate
+    build: .
     ports:
       - "3001:3001"
     restart: unless-stopped
@@ -9,3 +9,5 @@ services:
       - ./volume:/config
     environment:
       - TZ=Asia/Taipei
+      - LANG=en_US.UTF-8
+      - LC_ALL=en_US.UTF-8
