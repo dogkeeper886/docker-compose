@@ -21,7 +21,7 @@ make help    # Show available commands
 
 ## Access
 
-Open http://localhost:3001 in your browser.
+Open https://localhost:3001 in your browser.
 
 ## Font Configuration
 
