@@ -1,11 +1,11 @@
 services:
   webtop:
-    image: linuxserver/webtop:fedora-mate     
+    image: linuxserver/webtop:fedora-mate
     ports:
-      - "3001:3001"                           
-    restart: unless-stopped                  
-    runtime: nvidia                                        
+      - "3001:3001"
+    restart: unless-stopped
+    runtime: nvidia
     volumes:
-      - ./volume:/config                      # Persist user data and desktop settings
+      - ./volume:/config
     environment:
-      - TZ=Asia/Taipei                        
+      - TZ=Asia/Taipei
