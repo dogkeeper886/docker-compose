@@ -1,0 +1,9 @@
+# Ruckus AP SNMP Targets
+# Copy this file to ruckus-targets.yml and add your AP IP addresses
+# Prometheus will auto-reload when this file changes
+
+- targets:
+    - 192.168.1.100
+    # - 192.168.1.101  # Add more APs
+  labels:
+    job: ruckus-ap

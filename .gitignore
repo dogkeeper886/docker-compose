@@ -6,3 +6,4 @@ qdrant/volume-qdrant
 gitlab/volume
 gitlab/.env
 monitoring/volume
+monitoring/ruckus-targets.yml
