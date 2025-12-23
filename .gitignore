@@ -5,3 +5,4 @@ webtop/volume
 qdrant/volume-qdrant
 gitlab/volume
 gitlab/.env
+monitoring/volume
