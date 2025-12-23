@@ -5,7 +5,6 @@ services:
     restart: unless-stopped
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - ./ruckus-targets.yml:/etc/prometheus/ruckus-targets.yml:ro
       - ./volume/prometheus:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
