@@ -61,11 +61,27 @@ docker compose up -d
 2. Import recommended dashboards:
    - **Node Exporter Full**: ID `1860`
    - **Docker/cAdvisor**: ID `14282`
-   - **Libvirt**: Import from `libvirt-dashboard.json` (customized from ID `13633`)
+   - **Libvirt VMs**: Import from `libvirt-dashboard-v2.json` (recommended)
 
-### Libvirt Dashboard
+### Libvirt Dashboard (v2)
 
-The included `libvirt-dashboard.json` is a customized version of Grafana dashboard 13633, modified to work with `alekseizakharov/libvirt-exporter`. Metric names have been adjusted to match the exporter's output format (e.g., `_bytes` and `_seconds` suffixes).
+The `libvirt-dashboard-v2.json` is a streamlined dashboard for KVM/libvirt monitoring:
+
+| Row | Panels |
+|-----|--------|
+| Overview | VM Status Table, Running VMs, Total vCPUs, Total Memory, Avg Memory % |
+| CPU | CPU Usage Rate, vCPU Time |
+| Memory | Memory Usage %, Available vs Used, Balloon & Cache, Page Faults |
+| Disk I/O | Throughput, IOPS, I/O Time, Capacity vs Used |
+| Network | Throughput, Packets, Errors, Drops |
+
+**Features:**
+- 19 panels (simplified from 37 in v1)
+- Hardcoded `Prometheus` datasource (no configuration needed)
+- 2 template variables: `$instance` and `$domain`
+- Uses all metrics from `alekseizakharov/libvirt-exporter`
+
+> **Note**: The original `libvirt-dashboard.json` (based on Grafana ID 13633) is kept for reference but requires manual datasource configuration.
 
 ## Collected Metrics
 

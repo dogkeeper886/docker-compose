@@ -1,0 +1,359 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 1,
+      "panels": [],
+      "title": "Overview",
+      "type": "row"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [
+            { "options": { "0": { "text": "Stopped" }, "1": { "text": "Running" }, "2": { "text": "Blocked" }, "3": { "text": "Paused" }, "4": { "text": "Shutdown" }, "5": { "text": "Shutoff" }, "6": { "text": "Crashed" }, "7": { "text": "Suspended" } }, "type": "value" }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "green", "value": 1 }
+            ]
+          }
+        },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "vCPUs" }, "properties": [{ "id": "unit", "value": "short" }] },
+          { "matcher": { "id": "byName", "options": "Max Memory" }, "properties": [{ "id": "unit", "value": "bytes" }] },
+          { "matcher": { "id": "byName", "options": "Memory Used %" }, "properties": [{ "id": "unit", "value": "percent" }, { "id": "max", "value": 100 }] }
+        ]
+      },
+      "gridPos": { "h": 6, "w": 24, "x": 0, "y": 1 },
+      "id": 2,
+      "options": {
+        "showHeader": true,
+        "sortBy": [{ "desc": false, "displayName": "domain" }]
+      },
+      "targets": [
+        { "expr": "libvirt_domain_info_vstate{instance=~\"$instance\", domain=~\"$domain\"}", "format": "table", "instant": true, "legendFormat": "", "refId": "A" },
+        { "expr": "libvirt_domain_info_virtual_cpus{instance=~\"$instance\", domain=~\"$domain\"}", "format": "table", "instant": true, "legendFormat": "", "refId": "B" },
+        { "expr": "libvirt_domain_info_maximum_memory_bytes{instance=~\"$instance\", domain=~\"$domain\"}", "format": "table", "instant": true, "legendFormat": "", "refId": "C" },
+        { "expr": "libvirt_domain_memory_stats_used_percent{instance=~\"$instance\", domain=~\"$domain\"}", "format": "table", "instant": true, "legendFormat": "", "refId": "D" }
+      ],
+      "title": "VM Status",
+      "transformations": [
+        { "id": "seriesToColumns", "options": { "byField": "domain" } },
+        { "id": "organize", "options": { "excludeByName": { "Time": true, "Time 1": true, "Time 2": true, "Time 3": true, "Time 4": true, "instance": true, "instance 1": true, "instance 2": true, "instance 3": true, "instance 4": true, "job": true, "job 1": true, "job 2": true, "job 3": true, "job 4": true, "__name__": true, "__name__ 1": true, "__name__ 2": true, "__name__ 3": true, "__name__ 4": true }, "renameByName": { "Value #A": "State", "Value #B": "vCPUs", "Value #C": "Max Memory", "Value #D": "Memory Used %" } } }
+        ],
+      "type": "table"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 1 }] }
+        }
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 7 },
+      "id": 3,
+      "options": { "colorMode": "value", "graphMode": "none", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
+      "targets": [{ "expr": "count(libvirt_domain_info_vstate{instance=~\"$instance\", domain=~\"$domain\"} == 1)", "legendFormat": "Running", "refId": "A" }],
+      "title": "Running VMs",
+      "type": "stat"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] } }
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 7 },
+      "id": 4,
+      "options": { "colorMode": "value", "graphMode": "none", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
+      "targets": [{ "expr": "sum(libvirt_domain_info_virtual_cpus{instance=~\"$instance\", domain=~\"$domain\"})", "legendFormat": "", "refId": "A" }],
+      "title": "Total vCPUs",
+      "type": "stat"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "purple", "value": null }] }, "unit": "bytes" }
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 7 },
+      "id": 5,
+      "options": { "colorMode": "value", "graphMode": "none", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
+      "targets": [{ "expr": "sum(libvirt_domain_info_maximum_memory_bytes{instance=~\"$instance\", domain=~\"$domain\"})", "legendFormat": "", "refId": "A" }],
+      "title": "Total Memory Allocated",
+      "type": "stat"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 70 }, { "color": "red", "value": 90 }] }, "unit": "percent", "max": 100, "min": 0 }
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 7 },
+      "id": 6,
+      "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["mean"], "fields": "", "values": false }, "textMode": "auto" },
+      "targets": [{ "expr": "avg(libvirt_domain_memory_stats_used_percent{instance=~\"$instance\", domain=~\"$domain\"})", "legendFormat": "", "refId": "A" }],
+      "title": "Avg Memory Usage",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 11 },
+      "id": 10,
+      "panels": [],
+      "title": "CPU",
+      "type": "row"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "axisCenteredZero": false, "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10, "gradientMode": "none", "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5, "showPoints": "never", "spanNulls": false, "stacking": { "group": "A", "mode": "none" } }, "unit": "percentunit" } },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 },
+      "id": 11,
+      "options": { "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
+      "targets": [{ "expr": "rate(libvirt_domain_info_cpu_time_seconds_total{instance=~\"$instance\", domain=~\"$domain\"}[5m])", "legendFormat": "{{domain}}", "refId": "A" }],
+      "title": "CPU Usage Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "axisCenteredZero": false, "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10, "gradientMode": "none", "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5, "showPoints": "never", "spanNulls": false, "stacking": { "group": "A", "mode": "none" } }, "unit": "percentunit" } },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 },
+      "id": 12,
+      "options": { "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
+      "targets": [{ "expr": "rate(libvirt_domain_vcpu_time_seconds_total{instance=~\"$instance\", domain=~\"$domain\"}[5m])", "legendFormat": "{{domain}} vCPU{{cpu}}", "refId": "A" }],
+      "title": "vCPU Time",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 20 },
+      "id": 20,
+      "panels": [],
+      "title": "Memory",
+      "type": "row"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "axisCenteredZero": false, "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10, "gradientMode": "none", "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5, "showPoints": "never", "spanNulls": false, "stacking": { "group": "A", "mode": "none" } }, "unit": "percent", "max": 100, "min": 0 } },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 21 },
+      "id": 21,
+      "options": { "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
+      "targets": [{ "expr": "libvirt_domain_memory_stats_used_percent{instance=~\"$instance\", domain=~\"$domain\"}", "legendFormat": "{{domain}}", "refId": "A" }],
+      "title": "Memory Usage %",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "axisCenteredZero": false, "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 30, "gradientMode": "none", "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5, "showPoints": "never", "spanNulls": false, "stacking": { "group": "A", "mode": "normal" } }, "unit": "bytes" } },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 21 },
+      "id": 22,
+      "options": { "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
+      "targets": [
+        { "expr": "libvirt_domain_memory_stats_usable_bytes{instance=~\"$instance\", domain=~\"$domain\"}", "legendFormat": "{{domain}} usable", "refId": "A" },
+        { "expr": "libvirt_domain_memory_stats_available_bytes{instance=~\"$instance\", domain=~\"$domain\"} - libvirt_domain_memory_stats_usable_bytes{instance=~\"$instance\", domain=~\"$domain\"}", "legendFormat": "{{domain}} used", "refId": "B" }
+      ],
+      "title": "Memory Available vs Used",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "axisCenteredZero": false, "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10, "gradientMode": "none", "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5, "showPoints": "never", "spanNulls": false, "stacking": { "group": "A", "mode": "none" } }, "unit": "bytes" } },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 29 },
+      "id": 23,
+      "options": { "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
+      "targets": [
+        { "expr": "libvirt_domain_memory_stats_actual_balloon_bytes{instance=~\"$instance\", domain=~\"$domain\"}", "legendFormat": "{{domain}} balloon", "refId": "A" },
+        { "expr": "libvirt_domain_memory_stats_disk_cache_bytes{instance=~\"$instance\", domain=~\"$domain\"}", "legendFormat": "{{domain}} cache", "refId": "B" }
+      ],
+      "title": "Memory Balloon & Cache",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "axisCenteredZero": false, "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10, "gradientMode": "none", "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5, "showPoints": "never", "spanNulls": false, "stacking": { "group": "A", "mode": "none" } }, "unit": "short" } },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 29 },
+      "id": 24,
+      "options": { "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
+      "targets": [
+        { "expr": "rate(libvirt_domain_memory_stats_major_fault_total{instance=~\"$instance\", domain=~\"$domain\"}[5m])", "legendFormat": "{{domain}} major", "refId": "A" },
+        { "expr": "rate(libvirt_domain_memory_stats_minor_fault_total{instance=~\"$instance\", domain=~\"$domain\"}[5m])", "legendFormat": "{{domain}} minor", "refId": "B" }
+      ],
+      "title": "Page Faults Rate",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 37 },
+      "id": 30,
+      "panels": [],
+      "title": "Disk I/O",
+      "type": "row"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "axisCenteredZero": false, "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10, "gradientMode": "none", "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5, "showPoints": "never", "spanNulls": false, "stacking": { "group": "A", "mode": "none" } }, "unit": "Bps" } },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 38 },
+      "id": 31,
+      "options": { "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
+      "targets": [
+        { "expr": "rate(libvirt_domain_block_stats_read_bytes_total{instance=~\"$instance\", domain=~\"$domain\"}[5m])", "legendFormat": "{{domain}} read", "refId": "A" },
+        { "expr": "-rate(libvirt_domain_block_stats_write_bytes_total{instance=~\"$instance\", domain=~\"$domain\"}[5m])", "legendFormat": "{{domain}} write", "refId": "B" }
+      ],
+      "title": "Disk Throughput",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "axisCenteredZero": false, "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10, "gradientMode": "none", "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5, "showPoints": "never", "spanNulls": false, "stacking": { "group": "A", "mode": "none" } }, "unit": "iops" } },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 38 },
+      "id": 32,
+      "options": { "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
+      "targets": [
+        { "expr": "rate(libvirt_domain_block_stats_read_requests_total{instance=~\"$instance\", domain=~\"$domain\"}[5m])", "legendFormat": "{{domain}} read", "refId": "A" },
+        { "expr": "-rate(libvirt_domain_block_stats_write_requests_total{instance=~\"$instance\", domain=~\"$domain\"}[5m])", "legendFormat": "{{domain}} write", "refId": "B" }
+      ],
+      "title": "Disk IOPS",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "axisCenteredZero": false, "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10, "gradientMode": "none", "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5, "showPoints": "never", "spanNulls": false, "stacking": { "group": "A", "mode": "none" } }, "unit": "s" } },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 46 },
+      "id": 33,
+      "options": { "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
+      "targets": [
+        { "expr": "rate(libvirt_domain_block_stats_read_time_seconds_total{instance=~\"$instance\", domain=~\"$domain\"}[5m])", "legendFormat": "{{domain}} read", "refId": "A" },
+        { "expr": "rate(libvirt_domain_block_stats_write_time_seconds_total{instance=~\"$instance\", domain=~\"$domain\"}[5m])", "legendFormat": "{{domain}} write", "refId": "B" }
+      ],
+      "title": "Disk I/O Time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "axisCenteredZero": false, "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 30, "gradientMode": "none", "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5, "showPoints": "never", "spanNulls": false, "stacking": { "group": "A", "mode": "none" } }, "unit": "bytes" } },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 46 },
+      "id": 34,
+      "options": { "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
+      "targets": [
+        { "expr": "libvirt_domain_block_stats_capacity_bytes{instance=~\"$instance\", domain=~\"$domain\"}", "legendFormat": "{{domain}} capacity", "refId": "A" },
+        { "expr": "libvirt_domain_block_stats_physicalsize_bytes{instance=~\"$instance\", domain=~\"$domain\"}", "legendFormat": "{{domain}} used", "refId": "B" }
+      ],
+      "title": "Disk Capacity vs Used",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 54 },
+      "id": 40,
+      "panels": [],
+      "title": "Network I/O",
+      "type": "row"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "axisCenteredZero": false, "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10, "gradientMode": "none", "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5, "showPoints": "never", "spanNulls": false, "stacking": { "group": "A", "mode": "none" } }, "unit": "Bps" } },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 55 },
+      "id": 41,
+      "options": { "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
+      "targets": [
+        { "expr": "rate(libvirt_domain_interface_stats_receive_bytes_total{instance=~\"$instance\", domain=~\"$domain\"}[5m])", "legendFormat": "{{domain}} RX", "refId": "A" },
+        { "expr": "-rate(libvirt_domain_interface_stats_transmit_bytes_total{instance=~\"$instance\", domain=~\"$domain\"}[5m])", "legendFormat": "{{domain}} TX", "refId": "B" }
+      ],
+      "title": "Network Throughput",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "axisCenteredZero": false, "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10, "gradientMode": "none", "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5, "showPoints": "never", "spanNulls": false, "stacking": { "group": "A", "mode": "none" } }, "unit": "pps" } },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 55 },
+      "id": 42,
+      "options": { "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
+      "targets": [
+        { "expr": "rate(libvirt_domain_interface_stats_receive_packets_total{instance=~\"$instance\", domain=~\"$domain\"}[5m])", "legendFormat": "{{domain}} RX", "refId": "A" },
+        { "expr": "-rate(libvirt_domain_interface_stats_transmit_packets_total{instance=~\"$instance\", domain=~\"$domain\"}[5m])", "legendFormat": "{{domain}} TX", "refId": "B" }
+      ],
+      "title": "Network Packets",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "axisCenteredZero": false, "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10, "gradientMode": "none", "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5, "showPoints": "never", "spanNulls": false, "stacking": { "group": "A", "mode": "none" } }, "unit": "short" } },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 63 },
+      "id": 43,
+      "options": { "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
+      "targets": [
+        { "expr": "rate(libvirt_domain_interface_stats_receive_errors_total{instance=~\"$instance\", domain=~\"$domain\"}[5m])", "legendFormat": "{{domain}} RX errors", "refId": "A" },
+        { "expr": "rate(libvirt_domain_interface_stats_transmit_errors_total{instance=~\"$instance\", domain=~\"$domain\"}[5m])", "legendFormat": "{{domain}} TX errors", "refId": "B" }
+      ],
+      "title": "Network Errors",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "axisCenteredZero": false, "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10, "gradientMode": "none", "lineInterpolation": "linear", "lineWidth": 1, "pointSize": 5, "showPoints": "never", "spanNulls": false, "stacking": { "group": "A", "mode": "none" } }, "unit": "short" } },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 63 },
+      "id": 44,
+      "options": { "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
+      "targets": [
+        { "expr": "rate(libvirt_domain_interface_stats_receive_drops_total{instance=~\"$instance\", domain=~\"$domain\"}[5m])", "legendFormat": "{{domain}} RX drops", "refId": "A" },
+        { "expr": "rate(libvirt_domain_interface_stats_transmit_drops_total{instance=~\"$instance\", domain=~\"$domain\"}[5m])", "legendFormat": "{{domain}} TX drops", "refId": "B" }
+      ],
+      "title": "Network Drops",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["libvirt", "kvm", "vm"],
+  "templating": {
+    "list": [
+      {
+        "current": { "selected": true, "text": "All", "value": "$__all" },
+        "datasource": "Prometheus",
+        "definition": "label_values(libvirt_up, instance)",
+        "includeAll": true,
+        "multi": false,
+        "name": "instance",
+        "options": [],
+        "query": { "query": "label_values(libvirt_up, instance)", "refId": "StandardVariableQuery" },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "current": { "selected": true, "text": "All", "value": "$__all" },
+        "datasource": "Prometheus",
+        "definition": "label_values(libvirt_domain_info_vstate{instance=~\"$instance\"}, domain)",
+        "includeAll": true,
+        "multi": true,
+        "name": "domain",
+        "options": [],
+        "query": { "query": "label_values(libvirt_domain_info_vstate{instance=~\"$instance\"}, domain)", "refId": "StandardVariableQuery" },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      }
+    ]
+  },
+  "time": { "from": "now-1h", "to": "now" },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Libvirt VMs",
+  "uid": "libvirt-vms-v2",
+  "version": 1,
+  "weekStart": ""
+}
