@@ -1,0 +1,82 @@
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./volume/prometheus:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=30d"
+      - "--web.enable-lifecycle"
+    ports:
+      - "19090:9090"
+    environment:
+      - TZ=Asia/Taipei
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    volumes:
+      - ./volume/grafana:/var/lib/grafana
+    ports:
+      - "13000:3000"
+    environment:
+      - TZ=Asia/Taipei
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    depends_on:
+      - prometheus
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.sysfs=/host/sys"
+      - "--path.rootfs=/rootfs"
+      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+    ports:
+      - "19100:9100"
+    environment:
+      - TZ=Asia/Taipei
+
+  cadvisor:
+    image: ghcr.io/google/cadvisor:0.55.1
+    container_name: cadvisor
+    restart: unless-stopped
+    privileged: true
+    command:
+      - "--docker_only=true"
+      - "--disable_root_cgroup_stats=true"
+      - "--disable_metrics=disk,diskIO,referenced_memory"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    ports:
+      - "18081:8080"
+    environment:
+      - TZ=Asia/Taipei
+
+  libvirt-exporter:
+    image: alekseizakharov/libvirt-exporter:latest
+    container_name: libvirt-exporter
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - /var/run/libvirt:/var/run/libvirt:ro
+    ports:
+      - "19177:9177"
+    environment:
+      - TZ=Asia/Taipei
