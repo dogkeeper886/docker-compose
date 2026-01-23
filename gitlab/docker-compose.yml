@@ -4,6 +4,7 @@ services:
     container_name: gitlab
     hostname: gitlab
     restart: unless-stopped
+    shm_size: '256m'
     environment:
       TZ: Asia/Taipei
       GITLAB_OMNIBUS_CONFIG: |
