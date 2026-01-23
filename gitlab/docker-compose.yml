@@ -17,3 +17,23 @@ services:
       - ./volume/config:/etc/gitlab
       - ./volume/logs:/var/log/gitlab
       - ./volume/data:/var/opt/gitlab
+    networks:
+      - gitlab-network
+
+  gitlab-runner:
+    image: gitlab/gitlab-runner:latest
+    container_name: gitlab-runner
+    restart: unless-stopped
+    environment:
+      TZ: Asia/Taipei
+    volumes:
+      - ./volume/runner:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - gitlab
+    networks:
+      - gitlab-network
+
+networks:
+  gitlab-network:
+    driver: bridge
