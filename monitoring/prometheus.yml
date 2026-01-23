@@ -16,7 +16,7 @@ scrape_configs:
   # Docker container metrics via cAdvisor
   - job_name: 'cadvisor'
     static_configs:
-      - targets: ['cadvisor:8080']
+      - targets: ['host.docker.internal:18081']
 
   # KVM/Libvirt VM metrics
   - job_name: 'libvirt'

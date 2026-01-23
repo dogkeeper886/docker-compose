@@ -4,6 +4,8 @@ services:
   prometheus:
     image: prom/prometheus:latest
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./volume/prometheus:/prometheus
@@ -49,17 +51,25 @@ services:
       - TZ=Asia/Taipei
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.51.0
+    image: ghcr.io/google/cadvisor:0.55.1
+    container_name: cadvisor
     restart: unless-stopped
     privileged: true
+    pid: host
+    network_mode: host
+    command:
+      - "--port=18081"
+      - "--docker_only=true"
+      - "--disable_root_cgroup_stats=true"
+      - "--disable_metrics=disk,diskIO,referenced_memory,hugetlb,resctrl"
+      - "--housekeeping_interval=30s"
+      - "--store_container_labels=false"
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
-    ports:
-      - "18081:8080"
     environment:
       - TZ=Asia/Taipei
 
