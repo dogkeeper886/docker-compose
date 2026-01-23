@@ -1,39 +1,42 @@
+# GitLab CE - Self-hosted Git repository and CI/CD platform
+# Provides source code management, issue tracking, and DevOps pipelines
 services:
   gitlab:
-    image: gitlab/gitlab-ce:latest
-    container_name: gitlab
+    image: gitlab/gitlab-ce:latest       # Community Edition
+    container_name: gitlab               # Fixed container name for easy reference
     hostname: gitlab
-    restart: unless-stopped
-    shm_size: '256m'
+    restart: unless-stopped              # Auto-restart on failure
+    shm_size: '256m'                     # Required for Prometheus metrics
     environment:
-      TZ: Asia/Taipei
-      GITLAB_OMNIBUS_CONFIG: |
+      TZ: Asia/Taipei                    # Set timezone for logs and scheduling
+      GITLAB_OMNIBUS_CONFIG: |           # GitLab configuration
         external_url 'http://${GITLAB_HOST}:8929'
         gitlab_rails['gitlab_shell_ssh_port'] = 2222
     ports:
-      - "8929:8929"
-      - "2222:22"
+      - "8929:8929"                      # GitLab web interface
+      - "2222:22"                        # GitLab SSH for git operations
     volumes:
-      - ./volume/config:/etc/gitlab
-      - ./volume/logs:/var/log/gitlab
-      - ./volume/data:/var/opt/gitlab
+      - ./volume/config:/etc/gitlab      # GitLab configuration
+      - ./volume/logs:/var/log/gitlab    # GitLab logs
+      - ./volume/data:/var/opt/gitlab    # GitLab data (repos, uploads, etc.)
     networks:
-      - gitlab-network
+      - gitlab-network                   # Shared network with runner
 
   gitlab-runner:
-    image: gitlab/gitlab-runner:latest
-    container_name: gitlab-runner
-    restart: unless-stopped
+    image: gitlab/gitlab-runner:latest   # GitLab Runner for CI/CD jobs
+    container_name: gitlab-runner        # Fixed container name for easy reference
+    restart: unless-stopped              # Auto-restart on failure
     environment:
-      TZ: Asia/Taipei
+      TZ: Asia/Taipei                    # Set timezone for logs and scheduling
     volumes:
-      - ./volume/runner:/etc/gitlab-runner
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ./volume/runner:/etc/gitlab-runner          # Persist runner configuration
+      - /var/run/docker.sock:/var/run/docker.sock   # Docker-in-Docker for CI jobs
     depends_on:
-      - gitlab
+      - gitlab                           # Wait for GitLab to start
     networks:
-      - gitlab-network
+      - gitlab-network                   # Shared network with GitLab
 
+# Network for GitLab services communication
 networks:
   gitlab-network:
-    driver: bridge
+    driver: bridge                       # Bridge network for container isolation
