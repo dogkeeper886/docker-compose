@@ -42,6 +42,10 @@ RUN mkdir -p /etc/skel/Desktop && \
     cp /usr/share/applications/cursor.desktop /etc/skel/Desktop/ && \
     chmod +x /etc/skel/Desktop/cursor.desktop
 
+# Install Claude Code CLI (native installer)
+RUN curl -fsSL https://claude.ai/install.sh | bash && \
+    ln -s /root/.claude/bin/claude /usr/local/bin/claude
+
 # Clone and install San Francisco fonts
 RUN git clone https://github.com/sahibjotsaggu/San-Francisco-Pro-Fonts.git /usr/share/fonts/San-Francisco-Pro-Fonts && \
     git clone https://github.com/supercomputra/SF-Mono-Font.git /usr/share/fonts/SF-Mono-Font && \
