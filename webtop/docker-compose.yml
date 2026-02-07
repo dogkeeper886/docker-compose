@@ -4,7 +4,7 @@ services:
     ports:
       - "3001:3001"
     restart: unless-stopped
-    runtime: nvidia
+    runtime: ${DOCKER_RUNTIME:-runc}      # set DOCKER_RUNTIME=nvidia in .env for GPU
     volumes:
       - ./volume:/config
     environment:
