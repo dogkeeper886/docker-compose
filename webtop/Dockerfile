@@ -13,7 +13,7 @@ RUN dnf update -y && \
         fuse-libs && \
     dnf clean all
 
-# Install Cursor IDE
+# Install Cursor IDE (pinned to v0.44.11 — update URL when upgrading)
 RUN curl -L "https://download.todesktop.com/230313mzl4w4u92/cursor-0.44.11-build-250103fqxdt5u9z-x86_64.AppImage" -o /tmp/cursor.AppImage && \
     chmod +x /tmp/cursor.AppImage && \
     cd /opt && /tmp/cursor.AppImage --appimage-extract && \
@@ -42,8 +42,9 @@ RUN mkdir -p /etc/skel/Desktop && \
     cp /usr/share/applications/cursor.desktop /etc/skel/Desktop/ && \
     chmod +x /etc/skel/Desktop/cursor.desktop
 
-# Install Claude Code CLI (native installer)
+# Install Claude Code CLI and make it accessible to all users (webtop runs as abc user)
 RUN curl -fsSL https://claude.ai/install.sh | bash && \
+    chmod -R a+rX /root/.claude && \
     ln -s /root/.claude/bin/claude /usr/local/bin/claude
 
 # Clone and install San Francisco fonts
