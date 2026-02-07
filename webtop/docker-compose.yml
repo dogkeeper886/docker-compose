@@ -11,3 +11,15 @@ services:
       - TZ=Asia/Taipei
       - LANG=en_US.UTF-8
       - LC_ALL=en_US.UTF-8
+  webtop2:
+    build: .
+    ports:
+      - "3002:3001"
+    restart: unless-stopped
+    runtime: ${DOCKER_RUNTIME:-runc}      # set DOCKER_RUNTIME=nvidia in .env for GPU
+    volumes:
+      - ./volume2:/config
+    environment:
+      - TZ=Asia/Taipei
+      - LANG=en_US.UTF-8
+      - LC_ALL=en_US.UTF-8
