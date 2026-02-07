@@ -28,6 +28,19 @@ docker exec -u abc "$CONTAINER" bash -c '
   mkdir -p /config/.local/bin /config/.cache/dconf /config/.pki/nssdb
   printf "#!/bin/bash\nexec /config/.local/cursor/cursor --no-sandbox \"\$@\"\n" > /config/.local/bin/cursor
   chmod +x /config/.local/bin/cursor
+  mkdir -p /config/.local/share/applications
+  cat > /config/.local/share/applications/cursor.desktop << DESKTOP
+[Desktop Entry]
+Name=Cursor
+Comment=Cursor IDE
+Exec=/config/.local/cursor/cursor --no-sandbox %F
+Icon=/config/.local/cursor/cursor.png
+Terminal=false
+Type=Application
+Categories=Development;IDE;
+StartupWMClass=Cursor
+DESKTOP
+  chmod +x /config/.local/share/applications/cursor.desktop
   echo "Cursor installed successfully."
 '
 
