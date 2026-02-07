@@ -12,7 +12,9 @@ services:
       GITLAB_OMNIBUS_CONFIG: |           # GitLab configuration
         external_url 'http://${GITLAB_HOST}:8929'
         gitlab_rails['gitlab_shell_ssh_port'] = 2222
-        puma['worker_processes'] = 4
+        puma['worker_processes'] = 2
+        sidekiq['concurrency'] = 10
+        prometheus_monitoring['enable'] = false
     ports:
       - "8929:8929"                      # GitLab web interface
       - "2222:22"                        # GitLab SSH for git operations
