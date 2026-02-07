@@ -44,8 +44,7 @@ RUN mkdir -p /etc/skel/Desktop && \
 
 # Install Claude Code CLI and make it accessible to all users (webtop runs as abc user)
 RUN curl -fsSL https://claude.ai/install.sh | bash && \
-    chmod -R a+rX /root/.claude && \
-    ln -s /root/.claude/bin/claude /usr/local/bin/claude
+    ln -s /root/.local/bin/claude /usr/local/bin/claude
 
 # Clone and install San Francisco fonts
 RUN git clone https://github.com/sahibjotsaggu/San-Francisco-Pro-Fonts.git /usr/share/fonts/San-Francisco-Pro-Fonts && \
