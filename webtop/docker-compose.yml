@@ -2,7 +2,7 @@ services:
   webtop:
     build: .
     ports:
-      - "3001:3001"
+      - "${WEBTOP_PORT:-3000}:3001"
     restart: unless-stopped
     runtime: ${DOCKER_RUNTIME:-runc}      # set DOCKER_RUNTIME=nvidia in .env for GPU
     volumes:
@@ -14,7 +14,7 @@ services:
   webtop2:
     build: .
     ports:
-      - "3002:3001"
+      - "${WEBTOP2_PORT:-3002}:3001"
     restart: unless-stopped
     runtime: ${DOCKER_RUNTIME:-runc}      # set DOCKER_RUNTIME=nvidia in .env for GPU
     volumes:
