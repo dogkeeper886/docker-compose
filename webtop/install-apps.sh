@@ -3,6 +3,11 @@ set -e
 
 CONTAINER=${CONTAINER:-webtop-webtop-1}
 
+# Cursor version — update these when upgrading
+CURSOR_VERSION="0.44.11"
+CURSOR_BUILD="250103fqxdt5u9z"
+CURSOR_URL="https://download.todesktop.com/230313mzl4w4u92/cursor-${CURSOR_VERSION}-build-${CURSOR_BUILD}-x86_64.AppImage"
+
 echo "==> Ensuring /config/.local/bin is in PATH..."
 docker exec -u abc "$CONTAINER" bash -c '
   mkdir -p /config/.local/bin
@@ -11,14 +16,14 @@ docker exec -u abc "$CONTAINER" bash -c '
   fi
 '
 
-echo "==> Installing Cursor IDE..."
-docker exec -u abc "$CONTAINER" bash -c '
+echo "==> Installing Cursor IDE (v${CURSOR_VERSION})..."
+docker exec -u abc -e CURSOR_URL="$CURSOR_URL" "$CONTAINER" bash -c '
   if [ -f /config/.local/bin/cursor ]; then
     echo "Cursor already installed, skipping."
     exit 0
   fi
   echo "Downloading Cursor AppImage..."
-  curl -L "https://download.todesktop.com/230313mzl4w4u92/cursor-0.44.11-build-250103fqxdt5u9z-x86_64.AppImage" -o /tmp/cursor.AppImage
+  curl -L "$CURSOR_URL" -o /tmp/cursor.AppImage
   chmod +x /tmp/cursor.AppImage
   echo "Extracting Cursor..."
   cd /tmp && /tmp/cursor.AppImage --appimage-extract
@@ -65,3 +70,6 @@ docker exec -u abc "$CONTAINER" bash -c '
 '
 
 echo "==> All apps installed."
+echo ""
+echo "NOTE: Restart the container for desktop menu entries to appear:"
+echo "  docker compose restart"
