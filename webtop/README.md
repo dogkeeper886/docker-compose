@@ -12,11 +12,13 @@ MATE desktop environment accessible via web browser, based on linuxserver/webtop
 ## Usage
 
 ```bash
-make build   # Build the Docker image
-make up      # Start the container
-make down    # Stop the container
-make logs    # Follow container logs
-make help    # Show available commands
+make help           # Show available commands
+make build          # Build the Docker image
+make up             # Start the container in detached mode
+make down           # Stop the container
+make logs           # Follow container logs
+make setup          # Full setup: build, start, install apps
+make install-apps   # Install custom apps (Cursor, Zed, Claude) into running container
 ```
 
 ## Access
