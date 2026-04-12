@@ -31,7 +31,7 @@ services:
       - "13000:3000"
     environment:
       - TZ=Asia/Taipei
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
       - GF_USERS_ALLOW_SIGN_UP=false
     depends_on:
       - prometheus

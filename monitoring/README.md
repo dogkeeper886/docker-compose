@@ -15,6 +15,9 @@ Prometheus + Grafana monitoring stack for KVM/Docker hosts.
 ## Quick Start
 
 ```bash
+# Copy environment file and set your Grafana admin password
+cp .env.example .env
+
 # First-time setup (creates volumes with correct permissions)
 make setup
 
@@ -50,7 +53,7 @@ docker compose up -d
 ## Access
 
 - **Grafana**: http://localhost:13000
-  - Default login: `admin` / `admin`
+  - Default login: `admin` / password from `.env`
 - **Prometheus**: http://localhost:19090
 
 ## Grafana Setup
