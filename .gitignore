@@ -9,4 +9,5 @@ webtop/.env
 mcp-atlassian/.env
 monitoring/volume
 monitoring/ruckus-targets.yml
+monitoring/nvidia-gpu-targets.yml
 gpu-exporter/volume

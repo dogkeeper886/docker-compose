@@ -8,6 +8,7 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./nvidia-gpu-targets.yml:/etc/prometheus/nvidia-gpu-targets.yml:ro
       - ./volume/prometheus:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
@@ -24,6 +25,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./volume/grafana:/var/lib/grafana
+      - ./provisioning/dashboards/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
+      - ./provisioning/dashboards/nvidia-gpu.json:/var/lib/grafana/dashboards/nvidia-gpu.json:ro
     ports:
       - "13000:3000"
     environment:

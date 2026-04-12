@@ -1,0 +1,4 @@
+- targets:
+    - '<instance-ip>:9835'
+  labels:
+    instance: 'gpu-server'

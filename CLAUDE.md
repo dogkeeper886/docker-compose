@@ -61,6 +61,13 @@ docker-compose up -d --build
 ### Volume Management
 Each service uses local volumes in its directory (e.g., `./volume`, `./volume-chrome`) which are excluded from git via `.gitignore`.
 
+## Project Skills
+
+This project provides two slash commands in `.claude/commands/`:
+
+- `/design` — Design a new Grafana dashboard or Docker Compose service. Applies the inverted pyramid layout for dashboards (stat panels at top, reference info collapsed at bottom) and repo conventions for services.
+- `/review` — Review dashboard JSON, Docker Compose config, or Prometheus config against a checklist covering layout hierarchy, security (no hardcoded IPs/secrets), port conflicts, thresholds, template variables, and gitignore hygiene.
+
 ## Development Notes
 
 - All services require Docker and Docker Compose
