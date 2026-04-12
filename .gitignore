@@ -6,6 +6,7 @@ qdrant/volume-qdrant
 gitlab/volume
 gitlab/.env
 webtop/.env
+mcp-atlassian/.env
 monitoring/volume
 monitoring/ruckus-targets.yml
 gpu-exporter/volume

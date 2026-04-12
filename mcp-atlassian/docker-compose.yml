@@ -1,0 +1,20 @@
+# MCP-Atlassian - Streamable HTTP MCP server for Jira & Confluence
+# Provides MCP tool server for Dify with per-request authentication
+services:
+  mcp-atlassian:
+    image: ghcr.io/sooperset/mcp-atlassian:latest
+    container_name: mcp-atlassian
+    ports:
+      - "9000:9000"                   # MCP Streamable-HTTP endpoint
+    restart: unless-stopped
+    env_file:
+      - .env                          # Server-level config (URLs, OAuth credentials)
+    command:
+      - --transport
+      - streamable-http
+      - --port
+      - "9000"
+      - --stateless
+      - -vv
+    environment:
+      - TZ=Asia/Taipei
