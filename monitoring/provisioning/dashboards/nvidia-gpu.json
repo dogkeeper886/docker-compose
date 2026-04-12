@@ -48,32 +48,57 @@
       }
     },
     {
-      "title": "Memory Used / Total",
+      "title": "Memory Used",
       "type": "stat",
       "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
       "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
       "targets": [
         {
-          "expr": "sum(nvidia_smi_memory_used_bytes{uuid=~\"$uuid\"}) / sum(nvidia_smi_memory_total_bytes{uuid=~\"$uuid\"}) * 100",
+          "expr": "sum(nvidia_smi_memory_used_bytes{uuid=~\"$uuid\"})",
+          "legendFormat": "Used",
           "refId": "A"
+        },
+        {
+          "expr": "sum(nvidia_smi_memory_used_bytes{uuid=~\"$uuid\"}) / sum(nvidia_smi_memory_total_bytes{uuid=~\"$uuid\"}) * 100",
+          "legendFormat": "Utilization",
+          "refId": "B"
         }
       ],
       "fieldConfig": {
         "defaults": {
-          "unit": "percent",
-          "min": 0,
-          "max": 100,
+          "color": { "mode": "thresholds" },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 70 },
-              { "color": "red", "value": 90 }
+              { "color": "green", "value": null }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Used" },
+            "properties": [
+              { "id": "unit", "value": "bytes" }
             ]
           },
-          "color": { "mode": "thresholds" }
-        },
-        "overrides": []
+          {
+            "matcher": { "id": "byName", "options": "Utilization" },
+            "properties": [
+              { "id": "unit", "value": "percent" },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    { "color": "green", "value": null },
+                    { "color": "yellow", "value": 70 },
+                    { "color": "red", "value": 90 }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
       },
       "options": {
         "graphMode": "area",
@@ -206,8 +231,13 @@
       "targets": [
         {
           "expr": "nvidia_smi_utilization_memory_ratio{uuid=~\"$uuid\"} * 100",
-          "legendFormat": "{{uuid}}",
+          "legendFormat": "% {{uuid}}",
           "refId": "A"
+        },
+        {
+          "expr": "nvidia_smi_memory_used_bytes{uuid=~\"$uuid\"}",
+          "legendFormat": "Used {{uuid}}",
+          "refId": "B"
         }
       ],
       "fieldConfig": {
@@ -229,7 +259,38 @@
           },
           "color": { "mode": "palette-classic" }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": { "id": "byRegexp", "options": "/^Used/" },
+            "properties": [
+              { "id": "unit", "value": "bytes" },
+              { "id": "min", "value": 0 },
+              { "id": "max" },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Memory Used"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": { "fill": "dash", "dash": [10, 10] }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": {
+          "mode": "all",
+          "sort": "none"
+        }
       }
     },
     {
