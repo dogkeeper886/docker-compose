@@ -8,3 +8,4 @@ gitlab/.env
 webtop/.env
 monitoring/volume
 monitoring/ruckus-targets.yml
+gpu-exporter/volume
