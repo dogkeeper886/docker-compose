@@ -328,15 +328,75 @@
       }
     },
     {
+      "title": "GPU Clock",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 20 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "nvidia_smi_clocks_current_graphics_clock_hz{uuid=~\"$uuid\"} / 1e6",
+          "legendFormat": "{{uuid}}",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "MHz",
+          "custom": {
+            "fillOpacity": 10,
+            "lineWidth": 2
+          },
+          "color": { "mode": "palette-classic" }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "all",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "title": "Memory Clock",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 20 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "nvidia_smi_clocks_current_memory_clock_hz{uuid=~\"$uuid\"} / 1e6",
+          "legendFormat": "{{uuid}}",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "MHz",
+          "custom": {
+            "fillOpacity": 10,
+            "lineWidth": 2
+          },
+          "color": { "mode": "palette-classic" }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "all",
+          "sort": "desc"
+        }
+      }
+    },
+    {
       "title": "GPU Info",
       "type": "row",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 20 },
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 28 },
       "collapsed": true,
       "panels": [
         {
           "title": "GPU Info",
           "type": "table",
-          "gridPos": { "h": 5, "w": 24, "x": 0, "y": 21 },
+          "gridPos": { "h": 5, "w": 24, "x": 0, "y": 29 },
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
           "targets": [
             {
