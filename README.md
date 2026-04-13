@@ -14,6 +14,11 @@ A curated collection of Docker Compose configurations for commonly used services
   - Firefox on Ubuntu KDE
   - Chrome on Debian XFCE
 
+### 📊 Monitoring
+- **Monitoring** - Prometheus + Grafana stack (Node Exporter, cAdvisor, Libvirt Exporter)
+- **GPU Exporter** - NVIDIA GPU metrics exporter for Prometheus
+- **Ollama Exporter** - Ollama loaded model VRAM metrics exporter for Prometheus
+
 ### 📝 Web Applications
 - **WordPress** - Complete WordPress stack with MySQL database
 
@@ -35,6 +40,8 @@ A curated collection of Docker Compose configurations for commonly used services
    - Webtop Firefox: `http://localhost:3000`
    - Webtop Chrome: `http://localhost:3001`
    - WordPress: `http://localhost:80`
+   - Grafana: `http://localhost:13000`
+   - Prometheus: `http://localhost:19090`
 
 ## Service Details
 
@@ -46,6 +53,10 @@ A curated collection of Docker Compose configurations for commonly used services
 | Webtop Firefox | 3000 | ✅ | Ubuntu KDE desktop |
 | Webtop Chrome | 3001 | ✅ | Debian XFCE desktop |
 | WordPress | 80 | ❌ | WordPress + MySQL |
+| Grafana | 13000 | ❌ | Monitoring dashboard UI |
+| Prometheus | 19090 | ❌ | Time-series database |
+| GPU Exporter | 9835 | ❌ | NVIDIA GPU metrics exporter |
+| Ollama Exporter | 9836 | ❌ | Ollama loaded model metrics |
 
 ## Configuration
 

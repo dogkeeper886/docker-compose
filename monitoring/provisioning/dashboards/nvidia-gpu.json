@@ -388,9 +388,44 @@
       }
     },
     {
+      "title": "Ollama Loaded Models",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 28 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "ollama_model_vram_bytes",
+          "legendFormat": "{{model}} ({{parameter_size}}, {{quantization}}, ctx:{{context_length}})",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "min": 0,
+          "custom": {
+            "fillOpacity": 30,
+            "lineWidth": 2,
+            "stacking": {
+              "mode": "normal",
+              "group": "A"
+            }
+          },
+          "color": { "mode": "palette-classic" }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "all",
+          "sort": "desc"
+        }
+      }
+    },
+    {
       "title": "GPU Info",
       "type": "row",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 28 },
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 36 },
       "collapsed": true,
       "panels": [
         {
