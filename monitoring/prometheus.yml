@@ -23,6 +23,11 @@ scrape_configs:
     static_configs:
       - targets: ['libvirt-exporter:9177']
 
+  # Ollama loaded model metrics
+  - job_name: 'ollama'
+    static_configs:
+      - targets: ['host.docker.internal:9836']
+
   # NVIDIA GPU metrics via nvidia_gpu_exporter
   - job_name: 'nvidia-gpu'
     file_sd_configs:

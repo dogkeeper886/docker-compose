@@ -1,0 +1,14 @@
+name: ollama-exporter
+
+services:
+  ollama-exporter:
+    build: .
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "9836:9836"
+    environment:
+      - TZ=Asia/Taipei
+      - OLLAMA_URL=http://host.docker.internal:11434
+      - EXPORTER_PORT=9836
