@@ -3,7 +3,6 @@
 
 import json
 import os
-import time
 import urllib.request
 from http.server import HTTPServer, BaseHTTPRequestHandler
 

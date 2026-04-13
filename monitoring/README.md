@@ -12,11 +12,24 @@ Prometheus + Grafana monitoring stack for KVM/Docker hosts.
 | cAdvisor | 18081 | Docker container metrics |
 | Libvirt Exporter | 19177 | KVM/QEMU VM metrics |
 
+### External Exporters
+
+These run separately (see their own directories) and are scraped by Prometheus via `exporter-targets.yml`:
+
+| Exporter | Default Port | Description |
+|----------|------|-------------|
+| GPU Exporter (`gpu-exporter/`) | 9835 | NVIDIA GPU metrics (utilization, memory, temperature, power, clocks) |
+| Ollama Exporter (`ollama-exporter/`) | 9836 | Ollama loaded model VRAM usage with model details |
+
 ## Quick Start
 
 ```bash
-# Copy environment file and set your Grafana admin password
+# Copy environment and target files
 cp .env.example .env
+cp exporter-targets.example.yml exporter-targets.yml
+
+# Edit exporter-targets.yml with your actual exporter host IPs
+# Edit .env with your Grafana admin password
 
 # First-time setup (creates volumes with correct permissions)
 make setup
@@ -65,6 +78,7 @@ docker compose up -d
    - **Node Exporter Full**: ID `1860`
    - **Docker/cAdvisor**: ID `14282`
    - **Libvirt VMs**: Import from `libvirt-dashboard-v2.json` (recommended)
+   - **NVIDIA GPU Metrics**: Auto-provisioned from `nvidia-gpu.json`
 
 ### Libvirt Dashboard (v2)
 
@@ -86,6 +100,22 @@ The `libvirt-dashboard-v2.json` is a streamlined dashboard for KVM/libvirt monit
 
 > **Note**: The original `libvirt-dashboard.json` (based on Grafana ID 13633) is kept for reference but requires manual datasource configuration.
 
+### NVIDIA GPU Dashboard
+
+The `nvidia-gpu.json` is auto-provisioned and displays:
+
+| Row | Panels |
+|-----|--------|
+| Stats | GPU Utilization %, Memory Used, Max Temperature, Total Power Draw |
+| Timeseries | GPU Utilization, Memory Utilization, Temperature, Power Draw, GPU Clock, Memory Clock |
+| Ollama | Loaded Models VRAM usage (stacked, with model/params/quantization in tooltip) |
+| Reference | GPU Info table (collapsed) |
+
+**Features:**
+- Template variables: `$DS_PROMETHEUS` (datasource), `$uuid` (GPU filter)
+- External targets configured via `exporter-targets.yml` (gitignored)
+- Copy `exporter-targets.example.yml` and set your exporter host IPs
+
 ## Collected Metrics
 
 ### Host (Node Exporter)
@@ -103,6 +133,16 @@ The `libvirt-dashboard-v2.json` is a streamlined dashboard for KVM/libvirt monit
 - Per-VM CPU usage
 - Per-VM memory allocation
 - Per-VM disk/network I/O
+
+### NVIDIA GPU (GPU Exporter)
+- GPU utilization, memory utilization
+- Temperature, power draw
+- Graphics and memory clock speeds
+- GPU info labels (name, driver version, etc.)
+
+### Ollama (Ollama Exporter)
+- `ollama_model_vram_bytes` — VRAM per loaded model
+- Labels: model name, parameter size, quantization level, context length
 
 ## Technical Notes
 

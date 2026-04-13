@@ -1,0 +1,11 @@
+- targets:
+    - 'hostname:9835'
+  labels:
+    instance: 'gpu-server'
+    exporter: 'nvidia-gpu'
+
+- targets:
+    - 'hostname:9836'
+  labels:
+    instance: 'gpu-server'
+    exporter: 'ollama'

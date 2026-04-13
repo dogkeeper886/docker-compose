@@ -11,4 +11,6 @@ monitoring/.env
 monitoring/volume
 monitoring/ruckus-targets.yml
 monitoring/nvidia-gpu-targets.yml
+monitoring/ollama-targets.yml
+monitoring/exporter-targets.yml
 gpu-exporter/volume

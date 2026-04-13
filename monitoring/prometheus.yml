@@ -25,12 +25,26 @@ scrape_configs:
 
   # Ollama loaded model metrics
   - job_name: 'ollama'
-    static_configs:
-      - targets: ['host.docker.internal:9836']
+    file_sd_configs:
+      - files:
+          - /etc/prometheus/exporter-targets.yml
+        refresh_interval: 5m
+    relabel_configs:
+      - source_labels: [exporter]
+        regex: 'ollama'
+        action: keep
+      - regex: 'exporter'
+        action: labeldrop
 
   # NVIDIA GPU metrics via nvidia_gpu_exporter
   - job_name: 'nvidia-gpu'
     file_sd_configs:
       - files:
-          - /etc/prometheus/nvidia-gpu-targets.yml
+          - /etc/prometheus/exporter-targets.yml
         refresh_interval: 5m
+    relabel_configs:
+      - source_labels: [exporter]
+        regex: 'nvidia-gpu'
+        action: keep
+      - regex: 'exporter'
+        action: labeldrop
