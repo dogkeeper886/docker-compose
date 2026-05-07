@@ -12,5 +12,6 @@ services:
       - LANG=en_US.UTF-8
       - LC_ALL=en_US.UTF-8
       - ZED_ALLOW_EMULATED_GPU=1
+      - BROWSER=firefox
       - CUSTOM_USER=${CUSTOM_USER:-abc}
       - PASSWORD=${PASSWORD:-}

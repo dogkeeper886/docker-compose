@@ -1,4 +1,4 @@
-.PHONY: help build up down logs setup install-apps
+.PHONY: help build up down logs
 
 help:			## Show this help message
 	@echo "Usage: make [target]"
@@ -17,10 +17,3 @@ down:			## Stop the container
 
 logs:			## Follow container logs
 	docker compose logs -f
-
-setup: build up install-apps	## Full setup: build, start, install apps
-
-install-apps:		## Install custom apps (Cursor, Zed, Claude) into running container
-	@echo "Waiting for container to be ready..."
-	@sleep 5
-	bash install-apps.sh
