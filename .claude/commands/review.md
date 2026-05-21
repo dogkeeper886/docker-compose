@@ -18,6 +18,7 @@ If no specific file is given, review all changed files in the current branch com
 - [ ] Port mappings do not conflict with other services in the repo
 - [ ] NVIDIA runtime configured where GPU is needed
 - [ ] Health checks defined where applicable
+- [ ] Healthcheck endpoint matches the service's real port **and** network mode — e.g. cAdvisor's `CADVISOR_HEALTHCHECK_URL` must use the `--port` value under `network_mode: host`, or the *container-internal* port (not the host-mapped port) under bridge networking; a mismatch flags the container `unhealthy` while `/metrics` still works
 - [ ] `depends_on` set for service dependencies
 
 ### Grafana Dashboard JSON
