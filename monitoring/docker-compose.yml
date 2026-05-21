@@ -27,6 +27,7 @@ services:
       - ./volume/grafana:/var/lib/grafana
       - ./provisioning/dashboards/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
       - ./provisioning/dashboards/nvidia-gpu.json:/var/lib/grafana/dashboards/nvidia-gpu.json:ro
+      - ./provisioning/dashboards/opnsense.json:/var/lib/grafana/dashboards/opnsense.json:ro
     ports:
       - "13000:3000"
     environment:

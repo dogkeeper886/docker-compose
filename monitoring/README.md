@@ -75,6 +75,7 @@ Open Grafana at http://localhost:13000 and log in as `admin` (password from your
    - **Docker/cAdvisor**: ID `14282`
    - **Libvirt VMs**: Import from `libvirt-dashboard-v2.json` (recommended)
    - **NVIDIA GPU Metrics**: Auto-provisioned from `nvidia-gpu.json`
+   - **OPNsense (FreeBSD)**: Auto-provisioned from `opnsense.json` — a Node Exporter Full clone with memory widgets remapped to FreeBSD metrics (`node_memory_active/wired/size_bytes`); select the router via the `node` variable
 
 ### Libvirt Dashboard (v2)
 
