@@ -74,7 +74,10 @@ Open Grafana at http://localhost:13000 and log in as `admin` (password from your
    - **Node Exporter Full**: ID `1860`
    - **Docker/cAdvisor**: ID `14282`
    - **Libvirt VMs**: Import from `libvirt-dashboard-v2.json` (recommended)
-   - **NVIDIA GPU Metrics**: Auto-provisioned from `nvidia-gpu.json`
+   - **NVIDIA GPU Metrics**: provisioned from `nvidia-gpu.json`
+   - **OPNsense (FreeBSD)**: provisioned from `opnsense.json` — a Node Exporter Full clone with memory widgets remapped to FreeBSD metrics (`node_memory_active/wired/size_bytes`); select the router via the `node` variable
+
+> Dashboards are **seeded into the Grafana volume** (`volume/grafana/dashboards/`) by `make setup`, not mounted read-only into the container. Grafana's file provider scans that directory and reloads changes every ~30s, so you can add or edit dashboards in the volume while the container is running. The source copies live in `provisioning/dashboards/`; re-run `make seed-dashboards` to refresh the volume from them.
 
 ### Libvirt Dashboard (v2)
 
