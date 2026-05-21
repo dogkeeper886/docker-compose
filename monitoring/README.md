@@ -1,6 +1,6 @@
 # Monitoring Stack
 
-Prometheus + Grafana monitoring stack for KVM/Docker hosts.
+A Prometheus and Grafana stack for monitoring KVM and Docker hosts.
 
 ## Services
 
@@ -14,7 +14,7 @@ Prometheus + Grafana monitoring stack for KVM/Docker hosts.
 
 ### External Exporters
 
-These run separately (see their own directories) and are scraped by Prometheus via `exporter-targets.yml`:
+These live in their own directories and are scraped by Prometheus through `exporter-targets.yml`:
 
 | Exporter | Default Port | Description |
 |----------|------|-------------|
@@ -63,15 +63,11 @@ docker compose up -d
 | `make fix-permissions` | Fix volume directory permissions |
 | `make clean` | Stop services and remove volumes |
 
-## Access
-
-- **Grafana**: http://localhost:13000
-  - Default login: `admin` / password from `.env`
-- **Prometheus**: http://localhost:19090
-
 ## Grafana Setup
 
-1. Add Prometheus data source:
+Open Grafana at http://localhost:13000 and log in as `admin` (password from your `.env`). Prometheus lives at http://localhost:19090.
+
+1. Add the Prometheus data source:
    - URL: `http://prometheus:9090`
 
 2. Import recommended dashboards:
@@ -148,9 +144,19 @@ The `nvidia-gpu.json` is auto-provisioned and displays:
 
 ### cAdvisor Configuration
 
-This stack uses `gcr.io/cadvisor/cadvisor:v0.51.0` for container metrics collection.
+This stack uses `ghcr.io/google/cadvisor:0.55.1` for container metrics collection.
 
-> **Note for btrfs users**: If you encounter `failed to identify the read-write layer ID` errors with Docker's containerd-snapshotter, use `docker-compose-btrfs.yml` which includes cAdvisor v0.55.1 with containerd-snapshotter support and optimized metric collection.
+> **Note for btrfs users**: If you encounter `failed to identify the read-write layer ID` errors with Docker's containerd-snapshotter, use `docker-compose-btrfs.yml`. It runs the same cAdvisor image with a configuration tuned for that setup (bridge networking and adjusted metric flags).
+
+> **⚠️ cAdvisor healthcheck URL must match the container's port AND network mode.** The cAdvisor image's built-in healthcheck runs `wget --spider $CADVISOR_HEALTHCHECK_URL` *inside* the container. If `CADVISOR_HEALTHCHECK_URL` is unset or points at the wrong port, the container is flagged `unhealthy` even though `/metrics` works fine. The correct value depends on the setup — there is **no single global value**:
+>
+> | Setup | cAdvisor port | Correct `CADVISOR_HEALTHCHECK_URL` |
+> |-------|---------------|------------------------------------|
+> | `docker-compose.yml` (host networking) | `--port=18081` | `http://localhost:18081/healthz` |
+> | `host-exporters/` (host networking) | `--port=8081` | `http://localhost:8081/healthz` |
+> | `docker-compose-btrfs.yml` (bridge, `18081:8080`) | default `8080` | `http://localhost:8080/healthz` |
+>
+> Under **host networking**, use the `--port` value. Under **bridge networking**, the healthcheck runs in the container's own namespace, so it must use the *container-internal* port (`8080`) — **not** the host-mapped port (`18081`). The `docker-compose-btrfs.yml` variant currently omits this variable and is therefore flagged `unhealthy` (metrics still flow); set it to `http://localhost:8080/healthz` if you use that variant.
 
 ### Libvirt Exporter
 
