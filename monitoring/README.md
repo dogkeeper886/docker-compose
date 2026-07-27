@@ -36,6 +36,9 @@ make setup
 
 # Start all services
 make up
+
+# Import the community dashboards (needs Grafana running)
+make import-dashboards
 ```
 
 Or manually:
@@ -61,23 +64,46 @@ docker compose up -d
 | `make logs` | Show logs (follow mode) |
 | `make ps` | Show service status |
 | `make fix-permissions` | Fix volume directory permissions |
+| `make seed-dashboards` | Copy this repo's dashboards into the Grafana volume |
+| `make import-dashboards` | Import community dashboards into a running Grafana |
 | `make clean` | Stop services and remove volumes |
 
 ## Grafana Setup
 
 Open Grafana at http://localhost:13000 and log in as `admin` (password from your `.env`). Prometheus lives at http://localhost:19090.
 
-1. Add the Prometheus data source:
-   - URL: `http://prometheus:9090`
+The Prometheus data source is **provisioned automatically** from `provisioning/datasources/prometheus.yml` (uid `prometheus`, `http://prometheus:9090`, set as default) — no manual step.
 
-2. Import recommended dashboards:
-   - **Node Exporter Full**: ID `1860`
-   - **Docker/cAdvisor**: ID `14282`
-   - **Libvirt VMs**: Import from `libvirt-dashboard-v2.json` (recommended)
-   - **NVIDIA GPU Metrics**: provisioned from `nvidia-gpu.json`
-   - **OPNsense (FreeBSD)**: provisioned from `opnsense.json` — a Node Exporter Full clone with memory widgets remapped to FreeBSD metrics (`node_memory_active/wired/size_bytes`); select the router via the `node` variable
+> **Upgrading an existing install?** Earlier versions of this README told you to add the data source by hand, which gave it a random uid. Provisioning matches by *name*, so a hand-made data source called `Prometheus` gets its uid rewritten to `prometheus` on the next `make up` — and any dashboard already stored in Grafana that references the old uid renders as *"Datasource &lt;uid&gt; was not found"*. Fix by re-selecting the data source on the affected panels, or by renaming your old one before starting. Fresh installs are unaffected.
 
-> Dashboards are **seeded into the Grafana volume** (`volume/grafana/dashboards/`) by `make setup`, not mounted read-only into the container. Grafana's file provider scans that directory and reloads changes every ~30s, so you can add or edit dashboards in the volume while the container is running. The source copies live in `provisioning/dashboards/`; re-run `make seed-dashboards` to refresh the volume from them.
+### Two ways dashboards get in
+
+Dashboards arrive by one of two paths, and the difference matters:
+
+| Path | Command | Where it lives | Editable in the UI? |
+|------|---------|----------------|---------------------|
+| **Seeded** (file provider) | `make seed-dashboards` (runs in `make setup`) | `volume/grafana/dashboards/*.json` | **No** — `allowUiUpdates: false` in `provisioning/dashboards/dashboards.yml` makes Grafana refuse "Save". Edit the JSON file instead; the provider reloads it every ~30s. |
+| **Imported** (HTTP API) | `make import-dashboards` | Grafana's own database, inside `volume/grafana` | **Yes** — behaves like a dashboard you built by hand. |
+
+Import is the right path for community dashboards you expect to tweak. Seeding is the right path for dashboards this repo owns and versions in git.
+
+### Dashboards
+
+Imported from grafana.com by `make import-dashboards` (see the `DASHBOARDS` array in `import-dashboards.sh` to add more):
+
+- **Node Exporter Full** — ID `1860`. Host CPU, memory, disk, filesystem, network, load.
+- **Cadvisor exporter** — ID `14282`. Per-container CPU, memory, and network.
+
+Seeded from `provisioning/dashboards/` by `make setup`:
+
+- **NVIDIA GPU Metrics** — `nvidia-gpu.json`
+- **OPNsense (FreeBSD)** — `opnsense.json` — a Node Exporter Full clone with memory widgets remapped to FreeBSD metrics (`node_memory_active/wired/size_bytes`); select the router via the `node` variable
+
+Manual import, kept in this directory for reference:
+
+- **Libvirt VMs** — import `libvirt-dashboard-v2.json` (recommended over `libvirt-dashboard.json`)
+
+> Seeded dashboards are copied **into the Grafana volume**, not mounted read-only into the container — a per-file `:ro` mount makes them impossible to edit once the container is up. The source copies live in `provisioning/dashboards/`; re-run `make seed-dashboards` to refresh the volume from them.
 
 ### Libvirt Dashboard (v2)
 

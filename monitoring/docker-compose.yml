@@ -26,6 +26,7 @@ services:
     volumes:
       - ./volume/grafana:/var/lib/grafana
       - ./provisioning/dashboards/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
+      - ./provisioning/datasources:/etc/grafana/provisioning/datasources:ro
     ports:
       - "13000:3000"
     environment:
