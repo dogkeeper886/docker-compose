@@ -15,10 +15,12 @@ services:
     # Add /dev/nvidia1, /dev/nvidia2, ... on a multi-GPU host.
     # If you install the toolkit, prefer `runtime: nvidia` +
     # NVIDIA_VISIBLE_DEVICES=all and drop this block — that form is host-agnostic.
+    # Do not map /dev/nvidia-uvm here: it is created lazily by the driver when the
+    # first CUDA process starts, so it is absent at boot and Docker fails the
+    # container start with exit 128. nvidia-smi only needs nvidiactl + nvidiaN.
     devices:
       - /dev/nvidiactl:/dev/nvidiactl
       - /dev/nvidia0:/dev/nvidia0
-      - /dev/nvidia-uvm:/dev/nvidia-uvm
     volumes:
       - /usr/bin/nvidia-smi:/usr/bin/nvidia-smi:ro
       - /usr/lib64/libnvidia-ml.so.1:/usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1:ro
