@@ -39,6 +39,11 @@ services:
   node-exporter:
     image: prom/node-exporter:latest
     restart: unless-stopped
+    # Without this, node_uname_info reports the container id as nodename --
+    # uname() reads the UTS namespace, not the bind-mounted /host/proc -- and
+    # the dashboard's host picker shows a hex string. Host networking would
+    # also fix it but would break the node-exporter:9100 compose DNS name.
+    hostname: dell-e6320
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -76,14 +81,3 @@ services:
     environment:
       - TZ=Asia/Taipei
       - CADVISOR_HEALTHCHECK_URL=http://localhost:18081/healthz
-
-  libvirt-exporter:
-    image: alekseizakharov/libvirt-exporter:latest
-    restart: unless-stopped
-    privileged: true
-    volumes:
-      - /var/run/libvirt:/var/run/libvirt:ro
-    ports:
-      - "19177:9177"
-    environment:
-      - TZ=Asia/Taipei
