@@ -10,8 +10,16 @@ scrape_configs:
 
   # Host metrics via Node Exporter
   - job_name: 'node'
-    static_configs:
-      - targets: ['node-exporter:9100']
+    file_sd_configs:
+      - files:
+          - /etc/prometheus/exporter-targets.yml
+        refresh_interval: 5m
+    relabel_configs:
+      - source_labels: [exporter]
+        regex: 'node'
+        action: keep
+      - regex: 'exporter'
+        action: labeldrop
 
   # Docker container metrics via cAdvisor
   - job_name: 'cadvisor'
