@@ -76,14 +76,3 @@ services:
     environment:
       - TZ=Asia/Taipei
       - CADVISOR_HEALTHCHECK_URL=http://localhost:18081/healthz
-
-  libvirt-exporter:
-    image: alekseizakharov/libvirt-exporter:latest
-    restart: unless-stopped
-    privileged: true
-    volumes:
-      - /var/run/libvirt:/var/run/libvirt:ro
-    ports:
-      - "19177:9177"
-    environment:
-      - TZ=Asia/Taipei
