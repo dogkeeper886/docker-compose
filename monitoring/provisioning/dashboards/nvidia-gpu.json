@@ -646,7 +646,10 @@
                   "Time": true,
                   "Value": true,
                   "__name__": true,
-                  "job": true
+                  "job": true,
+                  "driver_model_current": true,
+                  "driver_model_pending": true,
+                  "cuda_version": true
                 }
               }
             }
