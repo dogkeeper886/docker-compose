@@ -14,3 +14,8 @@ monitoring/nvidia-gpu-targets.yml
 monitoring/ollama-targets.yml
 monitoring/exporter-targets.yml
 gpu-exporter/volume
+
+# Per-host compose overrides. `docker compose up` merges docker-compose.yml with
+# docker-compose.override.yml automatically, so host-specific values live here
+# and never dirty a tracked file. Each stack commits an .example alongside.
+docker-compose.override.yml

@@ -1,0 +1,17 @@
+#   cp docker-compose.override.example.yml docker-compose.override.yml
+#
+# Most of this stack is already tunable through .env (WEBTOP_PORT,
+# DOCKER_RUNTIME, CUSTOM_USER, PASSWORD) -- prefer that. Use this file only for
+# changes .env cannot express, such as extra mounts or devices.
+
+services:
+  webtop:
+    # --- Share host directories into the desktop --------------------------
+    # volumes:
+    #   - /path/to/Downloads:/config/Downloads
+    #   - /mnt/share:/config/share:ro
+
+    # --- Hardware the desktop needs ---------------------------------------
+    # devices:
+    #   - /dev/snd:/dev/snd
+    # shm_size: '2gb'                  # browsers with many tabs

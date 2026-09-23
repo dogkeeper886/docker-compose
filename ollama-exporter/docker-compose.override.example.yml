@@ -1,0 +1,12 @@
+#   cp docker-compose.override.example.yml docker-compose.override.yml
+
+services:
+  ollama-exporter:
+    # --- Scrape an Ollama that is not on this host ------------------------
+    # environment:
+    #   - OLLAMA_URL=http://ollama-host:11434
+
+    # --- Port already taken on this host ----------------------------------
+    # EXPORTER_PORT must match the container side of the mapping.
+    # ports: !override
+    #   - "19836:9836"

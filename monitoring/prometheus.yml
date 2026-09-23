@@ -3,12 +3,10 @@ global:
   evaluation_interval: 15s
 
 scrape_configs:
-  # Prometheus self-monitoring
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
 
-  # Host metrics via Node Exporter
   - job_name: 'node'
     file_sd_configs:
       - files:
@@ -21,12 +19,10 @@ scrape_configs:
       - regex: 'exporter'
         action: labeldrop
 
-  # Docker container metrics via cAdvisor
   - job_name: 'cadvisor'
     static_configs:
       - targets: ['host.docker.internal:18081']
 
-  # KVM/Libvirt VM metrics
   - job_name: 'libvirt'
     file_sd_configs:
       - files:
@@ -39,7 +35,6 @@ scrape_configs:
       - regex: 'exporter'
         action: labeldrop
 
-  # Ollama loaded model metrics
   - job_name: 'ollama'
     file_sd_configs:
       - files:
@@ -52,7 +47,6 @@ scrape_configs:
       - regex: 'exporter'
         action: labeldrop
 
-  # NVIDIA GPU metrics via nvidia_gpu_exporter
   - job_name: 'nvidia-gpu'
     file_sd_configs:
       - files:

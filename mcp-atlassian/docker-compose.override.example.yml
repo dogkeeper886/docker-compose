@@ -1,0 +1,19 @@
+#   cp docker-compose.override.example.yml docker-compose.override.yml
+#
+# Jira/Confluence URLs and credentials belong in .env, not here.
+
+services:
+  mcp-atlassian:
+    # --- Port already taken on this host ----------------------------------
+    # The server's own --port must match the container side, so override the
+    # command too if you change it.
+    # ports: !override
+    #   - "9001:9000"
+
+    # --- Quieter logs -----------------------------------------------------
+    # command: !override
+    #   - --transport
+    #   - streamable-http
+    #   - --port
+    #   - "9000"
+    #   - --stateless

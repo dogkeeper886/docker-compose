@@ -1,14 +1,14 @@
-# Ollama - Official LLM service with GPU acceleration
-# Provides local language model hosting and inference
 services:
   ollama:
-    image: ollama/ollama                # Official Ollama image
-    container_name: ollama              # Fixed container name for easy reference
+    image: ollama/ollama
+    container_name: ollama
     ports:
-      - "11434:11434"                   # Ollama API port
-    restart: unless-stopped             # Auto-restart on failure
-    runtime: nvidia                     # Enable NVIDIA GPU support
+      - "11434:11434"
+    restart: unless-stopped
+    runtime: nvidia
     volumes:
-      - ./volume:/root/.ollama          # Persist models and configuration
+      - ./volume:/root/.ollama
+      # To keep models on shared storage instead, bind-mount over the models
+      # dir in docker-compose.override.yml - see the example file.
     environment:
-      - TZ=Asia/Taipei                  # Set timezone for logs and scheduling         
+      - TZ=Asia/Taipei

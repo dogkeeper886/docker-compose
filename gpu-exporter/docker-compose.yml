@@ -2,27 +2,16 @@ name: gpu-exporter
 
 services:
   nvidia-gpu-exporter:
-    # 1.3.0 crashes against driver 580.x: newer nvidia-smi emits fields such as
-    # "clocks_event_reasons_counters.sw_power_cap [us]", which that version turns
-    # into invalid Prometheus metric names ("failed to register exporter").
     image: utkuozdemir/nvidia_gpu_exporter:1.13.1
     restart: unless-stopped
-    # This host has no NVIDIA Container Toolkit (no `nvidia` runtime registered),
-    # so the GPU is reached by mapping the device nodes and bind-mounting
-    # nvidia-smi + libnvidia-ml directly. Consequence: the device list must match
-    # the GPUs actually present — Docker refuses to start the container if a
-    # mapped /dev/nvidiaN does not exist, and a GPU left out is simply invisible.
-    # Add /dev/nvidia1, /dev/nvidia2, ... on a multi-GPU host.
-    # If you install the toolkit, prefer `runtime: nvidia` +
-    # NVIDIA_VISIBLE_DEVICES=all and drop this block — that form is host-agnostic.
-    devices:
-      - /dev/nvidiactl:/dev/nvidiactl
-      - /dev/nvidia0:/dev/nvidia0
-      - /dev/nvidia-uvm:/dev/nvidia-uvm
-    volumes:
-      - /usr/bin/nvidia-smi:/usr/bin/nvidia-smi:ro
-      - /usr/lib64/libnvidia-ml.so.1:/usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1:ro
+    command:
+      - --query-field-names=uuid,name,driver_version,utilization.gpu,utilization.memory,memory.total,memory.used,memory.free,temperature.gpu,power.draw,clocks.current.graphics,clocks.current.sm,clocks.current.memory,fan.speed
+    # On a host without the NVIDIA Container Toolkit, map the device nodes
+    # instead -- see docker-compose.override.example.yml.
+    runtime: nvidia
     ports:
       - "9835:9835"
     environment:
       - TZ=Asia/Taipei
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=utility

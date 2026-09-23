@@ -1,4 +1,4 @@
-.PHONY: help up down restart logs ps clean test
+.PHONY: help up down restart logs ps clean test diagrams
 
 help:
 	@echo "GPU Exporter Management"
@@ -13,6 +13,7 @@ help:
 	@echo "  ps       Show service status"
 	@echo "  test     Curl metrics endpoint"
 	@echo "  clean    Stop service and remove volumes"
+	@echo "  diagrams Render docs/diagrams/*.svg to PNG"
 
 up:
 	docker compose up -d
@@ -34,3 +35,6 @@ test:
 
 clean:
 	docker compose down -v
+
+diagrams:
+	cd docs/diagrams && for f in *.svg; do rsvg-convert -z 2 "$$f" -o "png/$${f%.svg}.png"; done

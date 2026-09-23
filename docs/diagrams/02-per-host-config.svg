@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="372" viewBox="0 0 780 372" role="img" aria-label="A tracked host-agnostic compose file merged with a gitignored per-host override">
+  <style>
+    .bg     { fill: #f6f8fa; }
+    .shared { fill: #ffffff; stroke: #2563eb; stroke-width: 2; }
+    .over   { fill: #fffaf2; stroke: #d97706; stroke-width: 2; stroke-dasharray: 5 4; }
+    .result { fill: #ffffff; stroke: #d0d7de; stroke-width: 1.5; }
+    .h      { font: 700 13.5px ui-sans-serif, "DejaVu Sans", Arial, sans-serif; fill: #1f2328; }
+    .hb     { font: 700 13.5px ui-sans-serif, "DejaVu Sans", Arial, sans-serif; fill: #2563eb; }
+    .ho     { font: 700 13px ui-sans-serif, "DejaVu Sans", Arial, sans-serif; fill: #b45309; }
+    .mono   { font: 11px ui-monospace, "DejaVu Sans Mono", Consolas, monospace; fill: #1f2328; }
+    .note   { font: 11px ui-sans-serif, "DejaVu Sans", Arial, sans-serif; fill: #57606a; }
+    .cap    { font: 12.5px ui-sans-serif, "DejaVu Sans", Arial, sans-serif; fill: #57606a; }
+    .arrow  { stroke: #8c959f; stroke-width: 1.6; fill: none; }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8c959f"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="780" height="372" rx="6"/>
+
+  <rect class="shared" x="240" y="24" width="300" height="62" rx="6"/>
+  <text class="hb"   x="258" y="48">docker-compose.yml</text>
+  <text class="note" x="258" y="70">tracked · byte-identical on every machine</text>
+
+  <path class="arrow" d="M330,86 L200,132" marker-end="url(#a)"/>
+  <path class="arrow" d="M450,86 L580,132" marker-end="url(#a)"/>
+
+  <text class="h" x="40"  y="152">machine A</text>
+  <text class="h" x="440" y="152">machine B</text>
+
+  <rect class="over" x="40" y="164" width="300" height="110" rx="6"/>
+  <text class="ho"   x="58" y="188">docker-compose.override.yml</text>
+  <text class="mono" x="58" y="212">services:</text>
+  <text class="mono" x="70" y="228">node-exporter:</text>
+  <text class="mono" x="82" y="244">hostname: alpha</text>
+  <text class="note" x="58" y="264">gitignored · never committed</text>
+
+  <rect class="over" x="440" y="164" width="300" height="110" rx="6"/>
+  <text class="ho"   x="458" y="188">docker-compose.override.yml</text>
+  <text class="mono" x="458" y="212">services:</text>
+  <text class="mono" x="470" y="228">node-exporter:</text>
+  <text class="mono" x="482" y="244">hostname: beta</text>
+  <text class="note" x="458" y="264">gitignored · never committed</text>
+
+  <path class="arrow" d="M190,276 L190,292" marker-end="url(#a)"/>
+  <path class="arrow" d="M590,276 L590,292" marker-end="url(#a)"/>
+
+  <rect class="result" x="40" y="296" width="300" height="40" rx="6"/>
+  <text class="mono" x="58" y="321">effective config for alpha</text>
+  <rect class="result" x="440" y="296" width="300" height="40" rx="6"/>
+  <text class="mono" x="458" y="321">effective config for beta</text>
+
+  <text class="cap" x="40" y="360">docker compose up -d merges the two automatically — no extra flag.</text>
+</svg>

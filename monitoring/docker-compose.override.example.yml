@@ -1,0 +1,31 @@
+#   cp docker-compose.override.example.yml docker-compose.override.yml
+
+services:
+  node-exporter:
+    # --- Required: this machine's name ------------------------------------
+    hostname: CHANGE-ME
+
+  # --- Btrfs / bridge-networking variant ----------------------------------
+  # The healthcheck then has to use the CONTAINER port (8080), not the
+  # host-mapped one.
+  #
+  # cadvisor:
+  #   network_mode: bridge
+  #   ports:
+  #     - "18081:8080"
+  #   command: !override
+  #     - "--docker_only=true"
+  #     - "--disable_root_cgroup_stats=true"
+  #     - "--disable_metrics=disk,diskIO,referenced_memory,hugetlb,resctrl"
+  #     - "--housekeeping_interval=30s"
+  #     - "--store_container_labels=false"
+  #   environment:
+  #     - CADVISOR_HEALTHCHECK_URL=http://localhost:8080/healthz
+
+  # --- Ports already taken on this host -----------------------------------
+  # grafana:
+  #   ports: !override
+  #     - "23000:3000"
+  # prometheus:
+  #   ports: !override
+  #     - "29090:9090"

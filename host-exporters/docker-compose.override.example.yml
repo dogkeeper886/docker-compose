@@ -1,0 +1,31 @@
+#   cp docker-compose.override.example.yml docker-compose.override.yml
+#
+# To move a port, change the listen address in the command.
+
+services:
+  node-exporter:
+    # --- Port 9100 already taken on this host -----------------------------
+    # command: !override
+    #   - "--path.procfs=/host/proc"
+    #   - "--path.sysfs=/host/sys"
+    #   - "--path.rootfs=/rootfs"
+    #   - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+    #   - "--web.listen-address=:9101"
+
+    # --- Extra collectors for this host -----------------------------------
+    # command: !override
+    #   - ...                          # repeat the flags above, then add:
+    #   - "--collector.systemd"
+
+  cadvisor:
+    # --- Port 8081 already taken -------------------------------------------
+    # Keep CADVISOR_HEALTHCHECK_URL in step with --port.
+    # command: !override
+    #   - "--port=8082"
+    #   - "--docker_only=true"
+    #   - "--disable_root_cgroup_stats=true"
+    #   - "--disable_metrics=disk,diskIO,referenced_memory,hugetlb,resctrl"
+    #   - "--housekeeping_interval=30s"
+    #   - "--store_container_labels=false"
+    # environment:
+    #   - CADVISOR_HEALTHCHECK_URL=http://localhost:8082/healthz

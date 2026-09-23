@@ -1,0 +1,24 @@
+#   cp docker-compose.override.example.yml docker-compose.override.yml
+
+services:
+  ollama:
+    # --- Models on shared storage -----------------------------------------
+    # Bind-mount over the models dir only.
+    # Mount the share on the host first. If it is exported root_squash and the
+    # container runs as root, this is read-only in practice: pull models on the
+    # file server as the share's owner, not here.
+    #
+    # volumes:
+    #   - /path/to/share/models:/root/.ollama/models
+
+    # --- No NVIDIA GPU on this host ---------------------------------------
+    # runtime: runc
+
+    # --- Port already taken (e.g. ollama37 is running) --------------------
+    # ports: !override
+    #   - "11435:11434"
+
+    # --- Tuning -----------------------------------------------------------
+    # environment:
+    #   - OLLAMA_KEEP_ALIVE=30m
+    #   - OLLAMA_MAX_LOADED_MODELS=2

@@ -1,0 +1,14 @@
+#   cp docker-compose.override.example.yml docker-compose.override.yml
+
+services:
+  open-webui:
+    # --- No NVIDIA GPU on this host ---------------------------------------
+    # runtime: runc
+
+    # --- Point at an Ollama somewhere other than this host ----------------
+    # environment:
+    #   - OLLAMA_BASE_URL=http://ollama-host:11434
+
+    # --- Port already taken on this host ----------------------------------
+    # ports: !override
+    #   - "8081:8080"

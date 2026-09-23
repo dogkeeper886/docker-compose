@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="372" viewBox="0 0 780 372" role="img" aria-label="One targets file feeds every Prometheus scrape job, filtered by an exporter label">
+  <style>
+    .bg    { fill: #f6f8fa; }
+    .file  { fill: #fffaf2; stroke: #d97706; stroke-width: 2; stroke-dasharray: 5 4; }
+    .job   { fill: #ffffff; stroke: #d0d7de; stroke-width: 1.5; }
+    .jobq  { fill: #ffffff; stroke: #d0d7de; stroke-width: 1.5; stroke-dasharray: 4 4; }
+    .ho    { font: 700 13px ui-sans-serif, "DejaVu Sans", Arial, sans-serif; fill: #b45309; }
+    .jt    { font: 700 12.5px ui-monospace, "DejaVu Sans Mono", monospace; fill: #1f2328; }
+    .jtq   { font: 700 12.5px ui-monospace, "DejaVu Sans Mono", monospace; fill: #8c959f; }
+    .mono  { font: 10.5px ui-monospace, "DejaVu Sans Mono", Consolas, monospace; fill: #1f2328; }
+    .monoq { font: 10.5px ui-monospace, "DejaVu Sans Mono", Consolas, monospace; fill: #8c959f; }
+    .lab   { font: 10.5px ui-monospace, "DejaVu Sans Mono", Consolas, monospace; fill: #b45309; }
+    .note  { font: 11px ui-sans-serif, "DejaVu Sans", Arial, sans-serif; fill: #57606a; }
+    .cap   { font: 12.5px ui-sans-serif, "DejaVu Sans", Arial, sans-serif; fill: #57606a; }
+    .arrow { stroke: #8c959f; stroke-width: 1.4; fill: none; }
+  </style>
+  <defs>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8c959f"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="780" height="372" rx="6"/>
+  <text class="cap" x="28" y="30">One file lists every exporter. Each job keeps only the ones labelled for it.</text>
+
+  <rect class="file" x="28" y="48" width="322" height="264" rx="6"/>
+  <text class="ho"   x="46" y="72">exporter-targets.yml</text>
+  <text class="note" x="46" y="90">gitignored · copied from the .example</text>
+
+  <text class="mono" x="46" y="124">- targets: ['gpu-box:9835']</text>
+  <text class="mono" x="58" y="140">labels:</text>
+  <text class="lab"  x="70" y="156">exporter: 'nvidia-gpu'</text>
+
+  <text class="mono" x="46" y="188">- targets: ['gpu-box:9836']</text>
+  <text class="mono" x="58" y="204">labels:</text>
+  <text class="lab"  x="70" y="220">exporter: 'ollama'</text>
+
+  <text class="mono" x="46" y="252">- targets: ['nas:9100']</text>
+  <text class="mono" x="58" y="268">labels:</text>
+  <text class="lab"  x="70" y="284">exporter: 'node'</text>
+
+  <path class="arrow" d="M352,140 C400,138 408,86  450,82"  marker-end="url(#b)"/>
+  <path class="arrow" d="M352,204 C400,202 408,154 450,150" marker-end="url(#b)"/>
+  <path class="arrow" d="M352,268 C400,266 408,222 450,218" marker-end="url(#b)"/>
+
+  <rect class="job" x="450" y="58" width="302" height="48" rx="6"/>
+  <text class="jt"   x="468" y="78">job_name: 'nvidia-gpu'</text>
+  <text class="mono" x="468" y="96">keep exporter = nvidia-gpu</text>
+
+  <rect class="job" x="450" y="126" width="302" height="48" rx="6"/>
+  <text class="jt"   x="468" y="146">job_name: 'ollama'</text>
+  <text class="mono" x="468" y="164">keep exporter = ollama</text>
+
+  <rect class="job" x="450" y="194" width="302" height="48" rx="6"/>
+  <text class="jt"   x="468" y="214">job_name: 'node'</text>
+  <text class="mono" x="468" y="232">keep exporter = node</text>
+
+  <rect class="jobq" x="450" y="262" width="302" height="48" rx="6"/>
+  <text class="jtq"   x="468" y="282">job_name: 'libvirt'</text>
+  <text class="monoq" x="468" y="300">defined, but no entry here yet</text>
+
+  <text class="cap" x="28" y="340">Add a host: one entry in this file — prometheus.yml never changes.</text>
+  <text class="note" x="28" y="360">The exporter label is dropped after filtering, so it never reaches storage.</text>
+</svg>
