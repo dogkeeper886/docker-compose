@@ -26,17 +26,20 @@ RUN git clone https://github.com/sahibjotsaggu/San-Francisco-Pro-Fonts.git /usr/
     git -C /usr/share/fonts/SF-Mono-Font checkout "$SF_MONO_COMMIT" && \
     fc-cache -fv
 
+# Cursor, Zed and Claude Code install their latest release. A changed CACHEBUST
+# reruns every layer below it; `make build` sets it to the current time.
+ARG CACHEBUST
+
 # Cursor IDE — extracted because AppImage needs FUSE+sandbox, which containers lack.
-ARG CURSOR_VERSION=0.44.11
-ARG CURSOR_BUILD=250103fqxdt5u9z
-RUN curl -fL "https://download.todesktop.com/230313mzl4w4u92/cursor-${CURSOR_VERSION}-build-${CURSOR_BUILD}-x86_64.AppImage" -o /tmp/cursor.AppImage && \
+RUN CURSOR_URL=$(curl -fsSL 'https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=stable' | sed -n 's/.*"downloadUrl":"\([^"]*\)".*/\1/p') && \
+    curl -fL "$CURSOR_URL" -o /tmp/cursor.AppImage && \
     chmod +x /tmp/cursor.AppImage && \
     cd /tmp && /tmp/cursor.AppImage --appimage-extract && \
     mkdir -p /opt/cursor && \
     mv /tmp/squashfs-root/* /opt/cursor/ && \
     rm -rf /tmp/squashfs-root /tmp/cursor.AppImage && \
     chmod -R go+rX /opt/cursor && \
-    printf '#!/bin/bash\nexec /opt/cursor/cursor --no-sandbox "$@"\n' > /usr/local/bin/cursor && \
+    printf '#!/bin/bash\nexec /opt/cursor/usr/share/cursor/cursor --no-sandbox "$@"\n' > /usr/local/bin/cursor && \
     chmod +x /usr/local/bin/cursor
 
 # MimeType=x-scheme-handler/cursor registers cursor:// for the sign-in OAuth callback.
@@ -45,7 +48,7 @@ RUN cat > /usr/share/applications/cursor.desktop <<'EOF'
 Name=Cursor
 Comment=Cursor IDE
 Exec=/usr/local/bin/cursor %U
-Icon=/opt/cursor/cursor.png
+Icon=/opt/cursor/co.anysphere.cursor.png
 Terminal=false
 Type=Application
 Categories=Development;IDE;
@@ -54,8 +57,7 @@ StartupWMClass=Cursor
 EOF
 
 # Zed editor
-ARG ZED_VERSION=1.1.6
-RUN curl -fL "https://github.com/zed-industries/zed/releases/download/v${ZED_VERSION}/zed-linux-x86_64.tar.gz" -o /tmp/zed.tar.gz && \
+RUN curl -fL "https://github.com/zed-industries/zed/releases/latest/download/zed-linux-x86_64.tar.gz" -o /tmp/zed.tar.gz && \
     tar -xzf /tmp/zed.tar.gz -C /opt && \
     rm /tmp/zed.tar.gz && \
     chown -R 911:911 /opt/zed.app && \

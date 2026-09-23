@@ -6,8 +6,8 @@ help:			## Show this help message
 	@echo "Targets:"
 	@grep -E '^[a-zA-Z_-]+:.*##' $(MAKEFILE_LIST) | awk -F ':.*## ' '{printf "  %-15s %s\n", $$1, $$2}'
 
-build:			## Build the Docker image
-	docker compose build
+build:			## Build the Docker image with the latest Cursor, Zed and Claude Code
+	docker compose build --build-arg CACHEBUST=$$(date +%s)
 
 up:			## Start the container in detached mode
 	docker compose up -d
