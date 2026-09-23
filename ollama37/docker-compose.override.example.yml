@@ -1,0 +1,15 @@
+#   cp docker-compose.override.example.yml docker-compose.override.yml
+
+services:
+  ollama37:
+    # --- Port conflict with the standard ollama stack ----------------------
+    # Run only one, or move this one here.
+    # ports: !override
+    #   - "11435:11434"
+
+    # --- No NVIDIA GPU on this host ---------------------------------------
+    # runtime: runc
+
+    # --- Models on shared storage -----------------------------------------
+    # volumes:
+    #   - /path/to/share/models:/root/.ollama/models

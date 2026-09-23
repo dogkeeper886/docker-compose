@@ -1,0 +1,20 @@
+#   cp docker-compose.override.example.yml docker-compose.override.yml
+#
+# GITLAB_HOST, GITLAB_PUMA_WORKERS and GITLAB_SIDEKIQ_CONCURRENCY come from
+# .env -- prefer that for those. Use this file for structural changes.
+
+services:
+  gitlab:
+    # --- Ports already taken on this host ---------------------------------
+    # Changing the web port means changing external_url too, so override the
+    # whole GITLAB_OMNIBUS_CONFIG block rather than the ports alone.
+    # ports: !override
+    #   - "9929:8929"
+    #   - "2223:22"
+
+    # --- Give a small host more headroom ----------------------------------
+    # shm_size: '512m'
+
+  gitlab-runner:
+    # --- Runner lives on a different machine ------------------------------
+    # profiles: ["disabled"]

@@ -1,17 +1,15 @@
-# Open WebUI - Web interface for LLM interaction with CUDA support
-# Provides a user-friendly interface for communicating with language models
 services:
   open-webui:
-    image: ghcr.io/open-webui/open-webui:cuda  # CUDA-enabled version for GPU acceleration
-    container_name: open-webui                 # Fixed container name for easy reference
+    image: ghcr.io/open-webui/open-webui:cuda
+    container_name: open-webui
     ports:
-      - "8080:8080"                            # Web interface port
-    restart: unless-stopped                    # Auto-restart on failure
+      - "8080:8080"
+    restart: unless-stopped
     volumes:
-      - ./volume:/app/backend/data             # Persist user data, conversations, and settings
+      - ./volume:/app/backend/data
     extra_hosts:
-      - "host.docker.internal:host-gateway"   # Allow connection to host services (like Ollama)
-    runtime: nvidia                            # Enable NVIDIA GPU support
+      - "host.docker.internal:host-gateway"
+    runtime: nvidia
     environment:
-      - TZ=Asia/Taipei                         # Set timezone for logs and scheduling    
+      - TZ=Asia/Taipei
 

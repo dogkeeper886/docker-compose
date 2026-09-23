@@ -1,0 +1,29 @@
+#   cp docker-compose.override.example.yml docker-compose.override.yml
+#
+# Hosts with the NVIDIA Container Toolkit need no override. Check with:
+#   docker info --format '{{json .Runtimes}}' | grep -q nvidia && echo present
+
+services:
+  nvidia-gpu-exporter:
+    # --- Host WITHOUT the NVIDIA Container Toolkit -------------------------
+    # The device list must match the GPUs present, and the libnvidia-ml path
+    # depends on the distro: /usr/lib64 on EL, /usr/lib/x86_64-linux-gnu on
+    # Debian/Ubuntu.
+    #
+    # runtime: runc
+    # devices:
+    #   - /dev/nvidiactl:/dev/nvidiactl
+    #   - /dev/nvidia-uvm:/dev/nvidia-uvm
+    #   - /dev/nvidia0:/dev/nvidia0
+    #   - /dev/nvidia1:/dev/nvidia1      # one line per additional GPU
+    # volumes:
+    #   - /usr/bin/nvidia-smi:/usr/bin/nvidia-smi:ro
+    #   - /usr/lib64/libnvidia-ml.so.1:/usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1:ro
+
+    # --- Limit which GPUs are exported ------------------------------------
+    # environment:
+    #   - NVIDIA_VISIBLE_DEVICES=0,1     # or GPU-<uuid>; default is `all`
+
+    # --- Port already taken on this host ----------------------------------
+    # ports: !override
+    #   - "19835:9835"
