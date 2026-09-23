@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="280" viewBox="0 0 820 280" font-family="Helvetica, Arial, sans-serif" font-size="13">
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#444"/></marker></defs>
+  <rect width="820" height="280" fill="#fff"/>
+  <text x="20" y="30" font-weight="bold">Tracked files hold what every install shares. What belongs to one install is gitignored.</text>
+  <rect x="20" y="50" width="240" height="210" rx="8" fill="#f3f3f3" stroke="#777"/>
+  <text x="35" y="74" font-weight="bold">Tracked, shared</text>
+  <text x="35" y="102">docker-compose.yml</text>
+  <text x="35" y="126">prometheus.yml</text>
+  <text x="35" y="150">provisioning/</text>
+  <text x="35" y="174">*.example files</text>
+  <line x1="262" y1="155" x2="298" y2="155" stroke="#444" marker-end="url(#a)"/>
+  <text x="266" y="145" fill="#555">cp</text>
+  <rect x="300" y="50" width="500" height="210" rx="8" fill="#eef5ea" stroke="#5b8c4a"/>
+  <text x="315" y="74" font-weight="bold">Gitignored, per host</text>
+  <text x="315" y="102">docker-compose.override.yml</text>
+  <text x="535" y="102" fill="#555">node-exporter hostname (required)</text>
+  <text x="535" y="120" fill="#555">cAdvisor bridge variant, port moves</text>
+  <text x="315" y="152">exporter-targets.yml</text>
+  <text x="535" y="152" fill="#555">which hosts to scrape</text>
+  <text x="315" y="190">.env</text>
+  <text x="535" y="190" fill="#555">Grafana admin password,</text>
+  <text x="535" y="208" fill="#555">read on first start only</text>
+  <text x="315" y="240">volume/</text>
+  <text x="535" y="240" fill="#555">Prometheus and Grafana data</text>
+</svg>

@@ -1,4 +1,4 @@
-.PHONY: help setup up down restart logs ps fix-permissions seed-dashboards import-dashboards clean
+.PHONY: help setup up down restart logs ps fix-permissions seed-dashboards import-dashboards clean diagrams
 
 help:
 	@echo "Monitoring Stack Management"
@@ -16,6 +16,7 @@ help:
 	@echo "  seed-dashboards  Copy provisioned dashboards into the Grafana volume"
 	@echo "  import-dashboards  Import community dashboards into a running Grafana (editable)"
 	@echo "  clean            Stop services and remove volumes"
+	@echo "  diagrams         Render docs/diagrams/*.svg to PNG"
 
 setup: fix-permissions seed-dashboards
 	@echo "Setup complete. Run 'make up' to start services."
@@ -60,3 +61,6 @@ ps:
 clean:
 	docker compose down -v
 	rm -rf volume/prometheus volume/grafana
+
+diagrams:
+	cd docs/diagrams && for f in *.svg; do rsvg-convert -z 2 "$$f" -o "png/$${f%.svg}.png"; done

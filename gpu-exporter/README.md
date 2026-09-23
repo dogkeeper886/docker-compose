@@ -1,69 +1,69 @@
 # GPU Exporter
 
-NVIDIA GPU metrics exporter for Prometheus. Exposes GPU metrics on port `9835` for the host monitoring stack to scrape.
+The `monitoring/` stack's Prometheus scrapes exporters on other hosts and shows their metrics in Grafana. GPU utilization, memory, temperature and power are different: only the host's NVIDIA driver knows them, and you read them with `nvidia-smi`. Prometheus has no endpoint to scrape for them, and a container can't reach the driver on its own. This directory runs [nvidia_gpu_exporter](https://github.com/utkuozdemir/nvidia_gpu_exporter) on each GPU host. On every scrape it runs `nvidia-smi` and serves the result as `nvidia_smi_*` metrics on port `9835`.
 
-Uses [nvidia_gpu_exporter](https://github.com/utkuozdemir/nvidia_gpu_exporter) which works with all NVIDIA GPUs including older architectures (Kepler/K80, compute capability 3.7).
-
-## Quick Start
+The host needs the NVIDIA driver, and either the NVIDIA Container Toolkit or the override in point 2.
 
 ```bash
-make up
-make test
+make up     # start the exporter
+make test   # print the first metrics from http://localhost:9835/metrics
 ```
 
-## Metrics Endpoint
-
 ```
-http://<instance-ip>:9835/metrics
+nvidia_smi_clocks_current_graphics_clock_hz{uuid="<gpu-uuid>"} 2.1e+08
+nvidia_smi_clocks_current_memory_clock_hz{uuid="<gpu-uuid>"} 4.05e+08
+...
 ```
 
-## Prometheus Scrape Config (on host)
+## 1. Each GPU host runs one exporter, and the central Prometheus scrapes them all
 
-Add this to the host's `prometheus.yml`:
+![One exporter per GPU host, scraped by the monitoring stack](docs/diagrams/png/1-overview.png)
+
+The exporter only serves metrics. Scraping, storage and dashboards stay in `monitoring/`. To add a GPU host, start the exporter there, then add a target to `monitoring/exporter-targets.yml`:
 
 ```yaml
-- job_name: 'nvidia-gpu'
-  static_configs:
-    - targets: ['<instance-ip>:9835']
-      labels:
-        instance: '<instance-name>'
+- targets:
+    - '<gpu-host>:9835'
+  labels:
+    instance: '<host-name>'
+    exporter: 'nvidia-gpu'
 ```
 
-## Exported Metrics
+The `nvidia-gpu` job in `monitoring/prometheus.yml` keeps only targets labelled `exporter: 'nvidia-gpu'`, and it re-reads the file every 5 minutes. Grafana shows the metrics on the **NVIDIA GPU Metrics** dashboard, provisioned from `monitoring/provisioning/dashboards/nvidia-gpu.json`.
 
-| Metric | Description |
-|--------|-------------|
-| `nvidia_gpu_temperature_celsius` | GPU temperature |
-| `nvidia_gpu_utilization_gpu_ratio` | GPU utilization (0-1) |
-| `nvidia_gpu_utilization_memory_ratio` | Memory utilization (0-1) |
-| `nvidia_gpu_memory_used_bytes` | Memory used |
-| `nvidia_gpu_memory_total_bytes` | Memory total |
-| `nvidia_gpu_memory_free_bytes` | Memory free |
-| `nvidia_gpu_power_draw_watts` | Power draw |
-| `nvidia_gpu_clock_graphics_hz` | Graphics clock |
-| `nvidia_gpu_clock_sm_hz` | SM clock |
-| `nvidia_gpu_clock_memory_hz` | Memory clock |
-| `nvidia_gpu_fan_speed_ratio` | Fan speed (0-1) |
+## 2. The container reaches the GPU through the NVIDIA Container Toolkit, or through an override
 
-## Grafana Dashboard
+![Toolkit host versus a host without the toolkit](docs/diagrams/png/2-gpu-access.png)
 
-Import dashboard ID `14574` (NVIDIA GPU Metrics) on the host Grafana, using the Prometheus data source that scrapes this exporter.
+`docker-compose.yml` uses `runtime: nvidia`, so the host needs the NVIDIA Container Toolkit. To check:
 
-## Makefile Commands
+```bash
+docker info --format '{{json .Runtimes}}' | grep -q nvidia && echo present
+```
 
-| Command | Description |
-|---------|-------------|
-| `make up` | Start exporter |
-| `make down` | Stop exporter |
-| `make restart` | Restart exporter |
-| `make logs` | Show logs |
-| `make ps` | Show status |
-| `make test` | Curl metrics endpoint |
-| `make clean` | Stop and remove volumes |
+On a host without the toolkit, copy the override and uncomment its first block:
 
-## Notes
+```bash
+cp docker-compose.override.example.yml docker-compose.override.yml
+```
 
-- Requires NVIDIA drivers installed on the host (nvidia-smi accessible)
-- Mounts nvidia-smi and libnvidia-ml.so from the host into the container
-- Compatible with Tesla K80 (driver 470.x, CUDA 11.4, compute 3.7)
-- No GPU runtime needed — reads metrics via NVML, does not run GPU workloads
+In the override, list one `/dev/nvidiaN` per GPU, and set the `libnvidia-ml.so.1` source path for your distro. The same file also has blocks to export only some GPUs (`NVIDIA_VISIBLE_DEVICES`) and to move the host port (`19835:9835`). If you move the port, use the new port in `exporter-targets.yml`.
+
+## 3. The `--query-field-names` list sets which metrics appear
+
+![Queried nvidia-smi fields become nvidia_smi_* metrics](docs/diagrams/png/3-metrics.png)
+
+The `command:` in `docker-compose.yml` names the 14 `nvidia-smi` fields to query. Each field becomes an `nvidia_smi_*` series labelled with the GPU's `uuid`. For example, `utilization.gpu` becomes `nvidia_smi_utilization_gpu_ratio`, and `memory.used` becomes `nvidia_smi_memory_used_bytes`. `nvidia_smi_gpu_info` holds each GPU's name and driver version as labels. To export another field, add it to the list and run `make up`, which recreates the container. `make restart` keeps the old command. A new field appears on the dashboard only after you add a panel for it.
+
+## Make targets
+
+| Target | What it does |
+|--------|--------------|
+| `make up` | Start the exporter |
+| `make down` | Stop the exporter |
+| `make restart` | Restart the exporter |
+| `make logs` | Follow the logs |
+| `make ps` | Show service status |
+| `make test` | Print the first 20 `nvidia_smi` lines from `localhost:9835/metrics` |
+| `make clean` | Stop the exporter and remove volumes |
+| `make diagrams` | Render `docs/diagrams/*.svg` to `docs/diagrams/png/` |

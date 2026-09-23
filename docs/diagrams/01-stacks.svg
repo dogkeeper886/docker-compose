@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="248" viewBox="0 0 780 248" role="img" aria-label="Each directory is a self-contained Docker Compose stack">
+  <style>
+    .bg   { fill: #f6f8fa; }
+    .card { fill: #ffffff; stroke: #d0d7de; stroke-width: 1.5; }
+    .dir  { font: 700 14px ui-sans-serif, "DejaVu Sans", Arial, sans-serif; fill: #1f2328; }
+    .mono { font: 11px ui-monospace, "DejaVu Sans Mono", Consolas, monospace; fill: #57606a; }
+    .run  { font: 10px ui-monospace, "DejaVu Sans Mono", Consolas, monospace; fill: #1a7f37; }
+    .cap  { font: 12.5px ui-sans-serif, "DejaVu Sans", Arial, sans-serif; fill: #57606a; }
+    .more { font: 13px ui-sans-serif, "DejaVu Sans", Arial, sans-serif; fill: #8c959f; }
+    .rule { stroke: #d0d7de; stroke-width: 1; stroke-dasharray: 4 4; }
+  </style>
+  <rect class="bg" width="780" height="248" rx="6"/>
+  <text class="cap" x="28" y="34">One repository, ten independent stacks — nothing shared at runtime.</text>
+  <g>
+    <rect class="card" x="28"  y="56" width="158" height="104" rx="6"/>
+    <text class="dir"  x="44"  y="82">ollama/</text>
+    <text class="mono" x="44"  y="104">docker-compose.yml</text>
+    <text class="mono" x="44"  y="121">./volume/</text>
+    <text class="run"  x="44"  y="145">▶ docker compose up -d</text>
+  </g>
+  <g>
+    <rect class="card" x="204" y="56" width="158" height="104" rx="6"/>
+    <text class="dir"  x="220" y="82">monitoring/</text>
+    <text class="mono" x="220" y="104">docker-compose.yml</text>
+    <text class="mono" x="220" y="121">prometheus.yml</text>
+    <text class="run"  x="220" y="145">▶ docker compose up -d</text>
+  </g>
+  <g>
+    <rect class="card" x="380" y="56" width="158" height="104" rx="6"/>
+    <text class="dir"  x="396" y="82">gitlab/</text>
+    <text class="mono" x="396" y="104">docker-compose.yml</text>
+    <text class="mono" x="396" y="121">.env</text>
+    <text class="run"  x="396" y="145">▶ docker compose up -d</text>
+  </g>
+  <g>
+    <rect class="card" x="556" y="56" width="158" height="104" rx="6"/>
+    <text class="dir"  x="572" y="82">webtop/</text>
+    <text class="mono" x="572" y="104">docker-compose.yml</text>
+    <text class="mono" x="572" y="121">Dockerfile</text>
+    <text class="run"  x="572" y="145">▶ docker compose up -d</text>
+  </g>
+  <text class="more" x="730" y="112">+ 6</text>
+  <line class="rule" x1="28" y1="186" x2="752" y2="186"/>
+  <text class="cap" x="28" y="212">No shared network, no depends_on across directories.</text>
+  <text class="cap" x="28" y="232">Start only the stacks that machine needs.</text>
+</svg>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="300" viewBox="0 0 760 300" font-family="Helvetica, Arial, sans-serif" font-size="13">
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#444"/></marker></defs>
+  <rect width="760" height="300" fill="#fff"/>
+  <!-- GPU hosts -->
+  <rect x="20" y="30" width="250" height="110" rx="8" fill="#eef5ea" stroke="#5b8c4a"/>
+  <text x="35" y="52" font-weight="bold">GPU host A</text>
+  <rect x="35" y="65" width="220" height="60" rx="6" fill="#fff" stroke="#5b8c4a"/>
+  <text x="50" y="88">gpu-exporter container</text>
+  <text x="50" y="108" fill="#555">:9835/metrics</text>
+  <rect x="20" y="165" width="250" height="110" rx="8" fill="#eef5ea" stroke="#5b8c4a"/>
+  <text x="35" y="187" font-weight="bold">GPU host B</text>
+  <rect x="35" y="200" width="220" height="60" rx="6" fill="#fff" stroke="#5b8c4a"/>
+  <text x="50" y="223">gpu-exporter container</text>
+  <text x="50" y="243" fill="#555">:9835/metrics</text>
+  <!-- monitoring -->
+  <rect x="360" y="30" width="380" height="245" rx="8" fill="#eaf0f8" stroke="#4a6c9b"/>
+  <text x="375" y="52" font-weight="bold">monitoring/ stack</text>
+  <rect x="375" y="70" width="200" height="80" rx="6" fill="#fff" stroke="#4a6c9b"/>
+  <text x="390" y="93">Prometheus</text>
+  <text x="390" y="113" fill="#555">job nvidia-gpu</text>
+  <text x="390" y="133" fill="#555">keeps exporter: nvidia-gpu</text>
+  <rect x="375" y="185" width="200" height="70" rx="6" fill="#fff" stroke="#4a6c9b"/>
+  <text x="390" y="210">Grafana</text>
+  <text x="390" y="230" fill="#555">NVIDIA GPU Metrics</text>
+  <rect x="595" y="70" width="130" height="80" rx="6" fill="#fff" stroke="#4a6c9b" stroke-dasharray="4 3"/>
+  <text x="605" y="93">exporter-</text>
+  <text x="605" y="111">targets.yml</text>
+  <text x="605" y="133" fill="#555">host:9835</text>
+  <line x1="595" y1="110" x2="579" y2="110" stroke="#444" marker-end="url(#a)"/>
+  <!-- scrapes -->
+  <line x1="373" y1="100" x2="258" y2="95" stroke="#444" marker-end="url(#a)"/>
+  <line x1="373" y1="120" x2="258" y2="225" stroke="#444" marker-end="url(#a)"/>
+  <text x="285" y="140" fill="#444">scrape</text>
+  <line x1="475" y1="152" x2="475" y2="183" stroke="#444" marker-end="url(#a)"/>
+  <text x="482" y="172" fill="#444">query</text>
+</svg>
