@@ -20,6 +20,9 @@ make down    # Stop the container
 make logs    # Follow container logs
 ```
 
+Cursor, Zed and Claude Code are not pinned: every `make build` installs their latest release.
+A plain `docker compose build` reuses the cached layers and keeps the versions it built last.
+
 ## Access
 
 Open https://localhost:3000 in your browser (or whichever port `WEBTOP_PORT` is set to in `.env`).
