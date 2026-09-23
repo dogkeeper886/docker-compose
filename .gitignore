@@ -2,16 +2,12 @@ ollama/volume
 ollama37/volume
 open-webui/volume
 webtop/volume
-qdrant/volume-qdrant
 gitlab/volume
 gitlab/.env
 webtop/.env
 mcp-atlassian/.env
 monitoring/.env
 monitoring/volume
-monitoring/ruckus-targets.yml
-monitoring/nvidia-gpu-targets.yml
-monitoring/ollama-targets.yml
 monitoring/exporter-targets.yml
 gpu-exporter/volume
 
